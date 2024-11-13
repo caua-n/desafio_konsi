@@ -1,6 +1,6 @@
-import 'package:desafio_konsi/features/client/rest_client_http_message.dart';
-import 'package:desafio_konsi/features/client/rest_client_response.dart';
-import 'package:desafio_konsi/features/errors/base_exception.dart';
+import 'package:desafio_konsi/core/client/rest_client_http_message.dart';
+import 'package:desafio_konsi/core/client/rest_client_response.dart';
+import 'package:desafio_konsi/core/errors/base_exception.dart';
 
 class RestClientException extends BaseException
     implements RestClientHttpMessage {

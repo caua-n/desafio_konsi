@@ -1,4 +1,4 @@
-import 'package:desafio_konsi/features/errors/base_exception.dart';
+import 'package:desafio_konsi/core/errors/base_exception.dart';
 
 abstract class BaseState {}
 
