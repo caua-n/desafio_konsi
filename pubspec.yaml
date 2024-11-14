@@ -39,6 +39,8 @@ dependencies:
   flutter_map: ^7.0.2
   result_dart: ^1.1.1
   location: ^7.0.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:

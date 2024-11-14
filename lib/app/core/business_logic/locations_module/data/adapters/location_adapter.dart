@@ -15,4 +15,28 @@ class LocationAdapter {
       throw AdapterException(message: e.toString());
     }
   }
+
+  static LocationEntity fromHive(Map<String, dynamic> data) {
+    try {
+      return LocationEntity(
+        data['id'] ?? -1,
+        cep: data['cep'] ?? '',
+        address: data['address'] ?? '',
+        addressNumber: data['addressNumber'] ?? '',
+        complement: data['complement'] ?? '',
+      );
+    } catch (e) {
+      throw AdapterException(message: e.toString());
+    }
+  }
+
+  static Map<String, dynamic> toHive(LocationEntity location) {
+    return {
+      'id': location.id,
+      'cep': location.cep,
+      'address': location.address,
+      'addressNumber': location.addressNumber,
+      'complement': location.complement,
+    };
+  }
 }
