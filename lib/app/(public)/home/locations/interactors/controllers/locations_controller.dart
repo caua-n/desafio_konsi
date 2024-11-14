@@ -1,5 +1,5 @@
-import 'package:desafio_konsi/app/(public)/interactors/states/locations_state.dart';
-import 'package:desafio_konsi/app/core/business_logic/locations_module/domain/usecases/get_locations_usecase.dart';
+import 'package:desafio_konsi/app/(public)/home/locations/interactors/states/locations_state.dart';
+import 'package:desafio_konsi/app/modules/locations_module/domain/usecases/get_locations_usecase.dart';
 import 'package:desafio_konsi/app/core/controllers/controllers.dart';
 import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:result_dart/result_dart.dart';

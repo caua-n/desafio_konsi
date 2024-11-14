@@ -1,5 +1,5 @@
-import 'package:desafio_konsi/app/core/business_logic/locations_module/data/adapters/location_adapter.dart';
-import 'package:desafio_konsi/app/core/business_logic/locations_module/domain/entities/list_locations_entity.dart';
+import 'package:desafio_konsi/app/modules/locations_module/data/adapters/location_adapter.dart';
+import 'package:desafio_konsi/app/modules/locations_module/domain/entities/list_locations_entity.dart';
 import 'package:desafio_konsi/app/core/errors/adapter_exception.dart';
 
 class ListLocationsAdapter {

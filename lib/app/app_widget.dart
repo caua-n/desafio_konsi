@@ -8,6 +8,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      title: 'Desafio Konsi',
       routerConfig: Routefly.routerConfig(
         initialPath: routePaths.splash,
         routes: routes,

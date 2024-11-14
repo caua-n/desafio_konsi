@@ -17,7 +17,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _navigate() async {
-    Routefly.navigate(routePaths.maps);
+    Routefly.navigate(routePaths.home.maps);
   }
 
   @override

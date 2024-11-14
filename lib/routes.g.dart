@@ -2,24 +2,25 @@
 
 import 'package:routefly/routefly.dart';
 
-import 'app/(public)/edit/edit_page.dart' as a0;
-import 'app/(public)/locations/locations_page.dart' as a1;
-import 'app/(public)/maps/maps_page.dart' as a2;
+import 'app/(public)/edit/edit_page.dart' as a4;
+import 'app/(public)/home/home_page.dart' as a2;
+import 'app/(public)/home/locations/locations_page.dart' as a1;
+import 'app/(public)/home/maps/maps_page.dart' as a0;
 import 'app/(public)/splash/splash_page.dart' as a3;
 
 List<RouteEntity> get routes => [
       RouteEntity(
-        key: '/edit',
-        uri: Uri.parse('/edit'),
+        key: '/home/maps',
+        uri: Uri.parse('/home/maps'),
         routeBuilder: (ctx, settings) => Routefly.defaultRouteBuilder(
           ctx,
           settings,
-          const a0.EditPage(),
+          const a0.MapsPage(),
         ),
       ),
       RouteEntity(
-        key: '/locations',
-        uri: Uri.parse('/locations'),
+        key: '/home/locations',
+        uri: Uri.parse('/home/locations'),
         routeBuilder: (ctx, settings) => Routefly.defaultRouteBuilder(
           ctx,
           settings,
@@ -27,12 +28,12 @@ List<RouteEntity> get routes => [
         ),
       ),
       RouteEntity(
-        key: '/maps',
-        uri: Uri.parse('/maps'),
+        key: '/home',
+        uri: Uri.parse('/home'),
         routeBuilder: (ctx, settings) => Routefly.defaultRouteBuilder(
           ctx,
           settings,
-          const a2.MapsPage(),
+          const a2.HomePage(),
         ),
       ),
       RouteEntity(
@@ -44,12 +45,24 @@ List<RouteEntity> get routes => [
           const a3.SplashPage(),
         ),
       ),
+      RouteEntity(
+        key: '/edit',
+        uri: Uri.parse('/edit'),
+        routeBuilder: (ctx, settings) => Routefly.defaultRouteBuilder(
+          ctx,
+          settings,
+          const a4.EditPage(),
+        ),
+      ),
     ];
 
 const routePaths = (
   path: '/',
-  edit: '/edit',
-  locations: '/locations',
-  maps: '/maps',
+  home: (
+    path: '/home',
+    maps: '/home/maps',
+    locations: '/home/locations',
+  ),
   splash: '/splash',
+  edit: '/edit',
 );
