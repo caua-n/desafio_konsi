@@ -1,11 +1,12 @@
-import 'package:desafio_konsi/core/client/dio/client_interceptor_dio_impl.dart';
-import 'package:desafio_konsi/core/client/dio/dio_adapter.dart';
-import 'package:desafio_konsi/core/client/i_client_interceptor.dart';
-import 'package:desafio_konsi/core/client/i_rest_client.dart';
-import 'package:desafio_konsi/core/client/rest_client_multipart.dart';
-import 'package:desafio_konsi/core/client/rest_client_request.dart';
-import 'package:desafio_konsi/core/client/rest_client_response.dart';
-import 'package:desafio_konsi/core/constants/env.dart';
+import 'package:desafio_konsi/app/core/client/dio/client_interceptor_dio_impl.dart';
+import 'package:desafio_konsi/app/core/client/dio/dio_adapter.dart';
+import 'package:desafio_konsi/app/core/client/i_client_interceptor.dart';
+import 'package:desafio_konsi/app/core/client/i_rest_client.dart';
+import 'package:desafio_konsi/app/core/client/rest_client_multipart.dart';
+import 'package:desafio_konsi/app/core/client/rest_client_request.dart';
+import 'package:desafio_konsi/app/core/client/rest_client_response.dart';
+import 'package:desafio_konsi/app/core/constants/env.dart';
+
 import 'package:dio/dio.dart';
 
 class DioFactory {

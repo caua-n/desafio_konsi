@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:desafio_konsi/core/client/i_client_interceptor.dart';
-import 'package:desafio_konsi/core/client/rest_client_exception.dart';
-import 'package:desafio_konsi/core/client/rest_client_http_message.dart';
-import 'package:desafio_konsi/core/client/rest_client_request.dart';
-import 'package:desafio_konsi/core/client/rest_client_response.dart';
+
+import 'package:desafio_konsi/app/core/client/i_client_interceptor.dart';
+import 'package:desafio_konsi/app/core/client/rest_client_exception.dart';
+import 'package:desafio_konsi/app/core/client/rest_client_http_message.dart';
+import 'package:desafio_konsi/app/core/client/rest_client_request.dart';
+import 'package:desafio_konsi/app/core/client/rest_client_response.dart';
 
 const JsonEncoder _encoder = JsonEncoder.withIndent('  ');
 

@@ -38,7 +38,7 @@ dependencies:
   universal_io: ^2.2.2
   location: ^4.2.3
   flutter_map: ^7.0.2
-
+  result_dart: ^1.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
