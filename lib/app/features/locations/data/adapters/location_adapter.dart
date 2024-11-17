@@ -1,36 +1,35 @@
-import 'package:desafio_konsi/app/features/locations/domain/entities/location_entity.dart';
-import 'package:desafio_konsi/app/core/errors/adapter_exception.dart';
+import '../../domain/entities/location_entity.dart';
 
-class LocationAdapter {
-  static LocationEntity fromJson(Map<String, dynamic> data) {
-    try {
-      return LocationEntity(
-        data['id'] ?? -1,
-        cep: data['cep'] ?? '',
-        address: data['address'] ?? '',
-        addressNumber: data['addressNumber'] ?? '',
-        complement: data['complement'],
-      );
-    } catch (e) {
-      throw AdapterException(
-        message: 'Erro ao adaptar JSON para LocationEntity: ${e.toString()}',
-      );
-    }
+class LocationAdapter extends LocationEntity {
+  LocationAdapter({
+    required int id,
+    required int cep,
+    required String address,
+    required int addressNumber,
+    required String complement,
+  }) : super(id,
+            cep: cep,
+            address: address,
+            addressNumber: addressNumber,
+            complement: complement);
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'cep': cep,
+      'address': address,
+      'address_number': addressNumber,
+      'complement': complement,
+    };
   }
 
-  static Map<String, dynamic> toJson(LocationEntity entity) {
-    try {
-      return {
-        'id': entity.id,
-        'cep': entity.cep,
-        'address': entity.address,
-        'addressNumber': entity.addressNumber,
-        'complement': entity.complement,
-      };
-    } catch (e) {
-      throw AdapterException(
-        message: 'Erro ao adaptar LocationEntity para JSON: ${e.toString()}',
-      );
-    }
+  factory LocationAdapter.fromMap(Map<String, dynamic> map) {
+    return LocationAdapter(
+      id: map['id'],
+      cep: map['cep'],
+      address: map['address'],
+      addressNumber: map['address_number'],
+      complement: map['complement'],
+    );
   }
 }
