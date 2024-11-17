@@ -13,23 +13,21 @@ class ScaffoldWithNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'A Screen',
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _calculateSelectedIndex(context),
+        onDestinationSelected: (int index) {
+          _onItemTapped(index, context);
+        },
+        destinations: const <Widget>[
+          NavigationDestination(
+            icon: Icon(Icons.explore),
+            label: 'Mapa',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'B Screen',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.notification_important_rounded),
-            label: 'C Screen',
+          NavigationDestination(
+            icon: Icon(Icons.commute),
+            label: 'Caderneta',
           ),
         ],
-        currentIndex: _calculateSelectedIndex(context),
-        onTap: (int idx) => _onItemTapped(idx, context),
       ),
     );
   }

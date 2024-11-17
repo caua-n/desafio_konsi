@@ -12,17 +12,19 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigate();
   }
 
   void _navigate() async {
     if (context.mounted) {
-      context.go('/home/maps');
+      context.go('/maps');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return ElevatedButton(
+      onPressed: _navigate,
+      child: Text('teste'),
+    );
   }
 }

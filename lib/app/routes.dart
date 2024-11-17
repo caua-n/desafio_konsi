@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'shell');
+
 final GoRouter router = GoRouter(
   routes: <RouteBase>[
     GoRoute(

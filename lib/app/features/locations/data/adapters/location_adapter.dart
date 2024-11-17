@@ -9,34 +9,28 @@ class LocationAdapter {
         cep: data['cep'] ?? '',
         address: data['address'] ?? '',
         addressNumber: data['addressNumber'] ?? '',
-        complement: data['complement'] ?? '',
+        complement: data['complement'],
       );
     } catch (e) {
-      throw AdapterException(message: e.toString());
+      throw AdapterException(
+        message: 'Erro ao adaptar JSON para LocationEntity: ${e.toString()}',
+      );
     }
   }
 
-  static LocationEntity fromHive(Map<String, dynamic> data) {
+  static Map<String, dynamic> toJson(LocationEntity entity) {
     try {
-      return LocationEntity(
-        data['id'] ?? -1,
-        cep: data['cep'] ?? '',
-        address: data['address'] ?? '',
-        addressNumber: data['addressNumber'] ?? '',
-        complement: data['complement'] ?? '',
-      );
+      return {
+        'id': entity.id,
+        'cep': entity.cep,
+        'address': entity.address,
+        'addressNumber': entity.addressNumber,
+        'complement': entity.complement,
+      };
     } catch (e) {
-      throw AdapterException(message: e.toString());
+      throw AdapterException(
+        message: 'Erro ao adaptar LocationEntity para JSON: ${e.toString()}',
+      );
     }
-  }
-
-  static Map<String, dynamic> toHive(LocationEntity location) {
-    return {
-      'id': location.id,
-      'cep': location.cep,
-      'address': location.address,
-      'addressNumber': location.addressNumber,
-      'complement': location.complement,
-    };
   }
 }
