@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:desafio_konsi/app/core/utils/network_info.dart';
 import 'package:desafio_konsi/app/features/locations/data/datasources/local/locations_local_datasource.dart';
@@ -10,13 +11,12 @@ import 'package:desafio_konsi/app/features/locations/domain/usecases/add_locatio
 import 'package:desafio_konsi/app/features/locations/domain/usecases/get_locations_usecase.dart';
 import 'package:desafio_konsi/app/screens/shell/maps/interactors/controllers/maps_controller.dart';
 import 'package:get_it/get_it.dart';
-import 'package:uno/uno.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // Injeção do Uno (Cliente HTTP)
-  sl.registerLazySingleton(() => Uno());
+  // dio
+  sl.registerLazySingleton(() => Dio());
 
   // internet
   sl.registerLazySingleton<Connectivity>(() => Connectivity());
@@ -27,7 +27,7 @@ Future<void> init() async {
   sl.registerLazySingleton<LocalLocationsDatasource>(
       () => LocalLocationsDatasource());
   sl.registerLazySingleton<RemoteLocationsDatasource>(
-      () => RemoteLocationsDatasource(sl<Uno>()));
+      () => RemoteLocationsDatasource(sl<Dio>()));
   sl.registerLazySingleton<LocationsDatasource>(
       () => FallbackLocationsDatasource(
             localDatasource: sl<LocalLocationsDatasource>(),

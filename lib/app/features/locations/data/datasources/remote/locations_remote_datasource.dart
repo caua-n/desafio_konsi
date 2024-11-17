@@ -1,20 +1,25 @@
+import 'package:dio/dio.dart';
 import 'package:desafio_konsi/app/features/locations/data/datasources/locations_datasource.dart';
-import 'package:uno/uno.dart';
 
 const _apiUrl = 'https://example.com/api/locations';
 
 class RemoteLocationsDatasource implements LocationsDatasource {
-  final Uno uno;
+  final Dio dio;
 
-  RemoteLocationsDatasource(this.uno);
+  RemoteLocationsDatasource(this.dio);
 
   @override
   Future<Map<String, dynamic>> fetchLocations() async {
-    final response = await uno.get(
-      _apiUrl,
-      responseType: ResponseType.json,
-    );
+    try {
+      final response = await dio.get<Map<String, dynamic>>(_apiUrl);
 
-    return response.data;
+      if (response.statusCode == 200 && response.data != null) {
+        return response.data!;
+      } else {
+        throw Exception('Erro na requisição: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Erro ao buscar localizações remotas: $e');
+    }
   }
 }
