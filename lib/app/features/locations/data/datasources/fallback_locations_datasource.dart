@@ -10,22 +10,24 @@ class FallbackLocationsDatasource implements LocationsDatasource {
   });
 
   @override
-  Future<List<Map<String, dynamic>>> fetchLocations() async {
-    final remoteData = await remoteDatasource.fetchLocations();
+  Future<List<Map<String, dynamic>>> fetchSavedLocations() async {
+    final remoteData = await remoteDatasource.fetchSavedLocations();
 
     if (remoteData.isNotEmpty) {
-      // Salva os dados remotos no banco local
       await localDatasource.saveLocations(remoteData);
       return remoteData;
     }
 
-    // Caso remoto falhe, retorna os dados locais
-    return await localDatasource.fetchLocations();
+    return await localDatasource.fetchSavedLocations();
   }
 
   @override
   Future<void> saveLocations(List<Map<String, dynamic>> locations) async {
-    // Apenas delega para o localDatasource
     await localDatasource.saveLocations(locations);
+  }
+
+  @override
+  Future<Map<String, dynamic>> searchCEP(String cep) async {
+    return await remoteDatasource.searchCEP(cep);
   }
 }

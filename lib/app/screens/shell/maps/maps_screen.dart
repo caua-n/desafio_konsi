@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:desafio_konsi/app/core/services/service_locator.dart';
+import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:desafio_konsi/app/screens/shell/maps/interactors/controllers/maps_controller.dart';
-import 'package:desafio_konsi/main.dart';
+import 'package:desafio_konsi/app/screens/shell/maps/interactors/states/maps_state.dart';
+
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:desafio_konsi/app/features/locations/domain/usecases/get_locations_usecase.dart';
 
 class MapsScreen extends StatefulWidget {
   const MapsScreen({super.key});
@@ -15,6 +18,20 @@ class MapsScreen extends StatefulWidget {
 
 class _MapsScreenState extends State<MapsScreen> {
   late final MapsController controller;
+  final TextEditingController _input = TextEditingController();
+  Timer? _debounceTimer;
+
+  void _onTextChanged(String value) {
+    // Cancelar o debounce anterior, se existir
+    if (_debounceTimer != null && _debounceTimer!.isActive) {
+      _debounceTimer!.cancel();
+    }
+
+    // Configurar um novo debounce
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      controller.searchLocations(value);
+    });
+  }
 
   @override
   void initState() {
@@ -27,6 +44,7 @@ class _MapsScreenState extends State<MapsScreen> {
 
   @override
   void dispose() {
+    _debounceTimer?.cancel();
     controller.removeListener(listener);
     controller.dispose();
     super.dispose();
@@ -38,19 +56,49 @@ class _MapsScreenState extends State<MapsScreen> {
       appBar: AppBar(
         title: const Text('Maps Screen'),
       ),
-      body: FutureBuilder(
-        future: getIt<GetLocationsUsecase>().call(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData) {
-            return const Center(child: Text('No locations available'));
-          } else {
-            // Dados de localização carregados com sucesso
-            final locations = snapshot.data!;
-            return FlutterMap(
+      body: Column(
+        children: [
+          TextField(
+            controller: _input,
+            onChanged: _onTextChanged,
+            decoration: InputDecoration(
+              labelText: 'Digite algo',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
+          ValueListenableBuilder(
+              valueListenable: controller,
+              builder: (context, state, child) {
+                return switch (state) {
+                  LoadedMapsState(:final listLocationsEntity) => SizedBox(
+                      height: 100,
+                      child: CustomScrollView(
+                        slivers: <Widget>[
+                          SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                  childCount: listLocationsEntity!.length,
+                                  (BuildContext context, int index) {
+                            final location = listLocationsEntity[index];
+                            return SizedBox(
+                              height: 100,
+                              child: ListTile(
+                                title: Text(location.cep),
+                              ),
+                            );
+                          }))
+                        ],
+                      ),
+                    ),
+                  ErrorState(:final exception) =>
+                    Center(child: Text('Erro: $exception')),
+                  _ => Center(child: Text('Estado desconhecido: $state')),
+                };
+              }),
+          SizedBox(
+            height: 300,
+            child: FlutterMap(
               options: const MapOptions(
                 initialCenter:
                     LatLng(51.509364, -0.128928), // Ponto inicial do mapa
@@ -71,9 +119,9 @@ class _MapsScreenState extends State<MapsScreen> {
                   ],
                 ),
               ],
-            );
-          }
-        },
+            ),
+          ),
+        ],
       ),
     );
   }

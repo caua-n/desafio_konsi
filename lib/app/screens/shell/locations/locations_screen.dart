@@ -41,13 +41,24 @@ class _LocationsScreenState extends State<LocationsScreen> {
           valueListenable: controller,
           builder: (context, state, child) {
             return switch (state) {
-              LoadedLocationsState(:final listLocationsEntity) => Center(
-                  child: Container(
-                      color: Colors.red,
-                      width: 150,
-                      height: 150,
-                      child: Text(listLocationsEntity!.length.toString())),
+              InitialState() => const Center(
+                  child: CircularProgressIndicator(),
                 ),
+              LoadedLocationsState(:final listLocationsEntity) =>
+                CustomScrollView(
+                  slivers: <Widget>[
+                    SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                            childCount: listLocationsEntity!.length,
+                            (BuildContext context, int index) {
+                      final location = listLocationsEntity[index];
+                      return ListTile(
+                        title: Text(location.address),
+                      );
+                    }))
+                  ],
+                ),
+              //Empty list state não desenhar nada por n ter sido requisitado, mostrar vazio mesmo
               ErrorState(:final exception) =>
                 Center(child: Text('Erro: $exception')),
               _ => Center(child: Text('Estado desconhecido: $state')),

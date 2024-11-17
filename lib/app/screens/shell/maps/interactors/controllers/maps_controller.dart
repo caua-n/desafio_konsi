@@ -1,16 +1,17 @@
 import 'package:desafio_konsi/app/core/controllers/controllers.dart';
 import 'package:desafio_konsi/app/core/states/base_state.dart';
 
-import 'package:desafio_konsi/app/features/locations/domain/usecases/get_locations_usecase.dart';
+import 'package:desafio_konsi/app/features/locations/domain/usecases/search_locations_usecase.dart';
 import 'package:desafio_konsi/app/screens/shell/maps/interactors/states/maps_state.dart';
 
 class MapsController extends BaseController<BaseState> {
-  final GetLocationsUsecase getLocationsUsecase;
+  final SearchLocationsUsecase searchLocationsUsecase;
 
-  MapsController({required this.getLocationsUsecase}) : super(InitialState());
+  MapsController({required this.searchLocationsUsecase})
+      : super(InitialState());
 
-  void loadLocations() async {
-    final result = await getLocationsUsecase();
+  void searchLocations(String cep) async {
+    final result = await searchLocationsUsecase(cep);
     final newState = result.fold(
       (data) {
         return LoadedMapsState(listLocationsEntity: data);

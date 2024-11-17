@@ -9,7 +9,25 @@ class RemoteLocationsDatasource implements LocationsDatasource {
   RemoteLocationsDatasource(this.dio);
 
   @override
-  Future<List<Map<String, dynamic>>> fetchLocations() async {
+  Future<Map<String, dynamic>> searchCEP(String cep) async {
+    try {
+      final response = await dio.get<Map<String, dynamic>>(
+        'https://viacep.com.br/ws/$cep/json/',
+      );
+
+      if (response.statusCode == 200 && response.data != null) {
+        return response.data!;
+      } else {
+        return {};
+      }
+    } catch (e) {
+      print('Erro ao buscar localização remota: $e');
+      return {};
+    }
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> fetchSavedLocations() async {
     try {
       final response = await dio.get<Map<String, dynamic>>(_apiUrl);
 

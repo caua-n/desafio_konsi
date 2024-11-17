@@ -1,7 +1,7 @@
 import 'package:desafio_konsi/app/core/entities/entity.dart';
 
 class LocationEntity extends Entity {
-  final int cep;
+  final String cep;
   final String address;
   final int addressNumber;
   final String complement;

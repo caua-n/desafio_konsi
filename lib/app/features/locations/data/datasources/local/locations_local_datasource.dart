@@ -8,13 +8,13 @@ class LocalLocationsDatasource implements LocationsDatasource {
   LocalLocationsDatasource(this.database);
 
   @override
-  Future<List<Map<String, dynamic>>> fetchLocations() async {
+  Future<List<Map<String, dynamic>>> fetchSavedLocations() async {
     final db = await database;
 
     final List<Map<String, dynamic>> result =
         await db.query(DatabaseHelper.tableLocations);
 
-    return result; // Retorna os dados encontrados ou uma lista vazia
+    return result;
   }
 
   @override
@@ -30,5 +30,11 @@ class LocalLocationsDatasource implements LocationsDatasource {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }
+  }
+
+  @override
+  Future<Map<String, dynamic>> searchCEP(String cep) {
+    // TODO: implement searchCEP
+    throw UnimplementedError();
   }
 }

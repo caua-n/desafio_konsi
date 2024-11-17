@@ -18,16 +18,36 @@ class LocationsRepositoryImpl implements ILocationsRepository {
   }
 
   @override
-  Future<Output<List<LocationEntity>>> getLocations() async {
+  Future<Output<List<LocationEntity>>> searchLocations(String cep) async {
     try {
-      // Busca localizações do datasource
-      final data = await datasource.fetchLocations();
+      // if (cep.isEmpty || !RegExp(r'^\d{5}-?\d{3}$').hasMatch(cep)) {
+      //   return const Failure(DefaultException(message: 'CEP inválido.'));
+      // }
 
-      // Converte os dados recebidos em uma lista de LocationEntity
+      final remoteData = await datasource.searchCEP(cep);
+
+      if (remoteData.isEmpty) {
+        return const Failure(DefaultException(message: 'CEP não encontrado.'));
+      }
+
+      final locationEntity = LocationAdapter.fromJson(remoteData);
+
+      return Success([locationEntity]);
+    } on BaseException catch (e) {
+      return Failure(DefaultException(message: e.message));
+    } catch (e) {
+      return const Failure(DefaultException(message: 'Erro desconhecido'));
+    }
+  }
+
+  @override
+  Future<Output<List<LocationEntity>>> getSavedLocations() async {
+    try {
+      final data = await datasource.fetchSavedLocations();
+
       final listLocationsEntity =
-          data.map((location) => LocationAdapter.fromMap(location)).toList();
+          data.map((location) => LocationAdapter.fromJson(location)).toList();
 
-      // Retorna sucesso com a lista de entidades (mesmo que esteja vazia)
       return Success(listLocationsEntity);
     } on BaseException catch (e) {
       return Failure(DefaultException(message: e.message));

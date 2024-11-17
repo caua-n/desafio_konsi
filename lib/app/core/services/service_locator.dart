@@ -1,3 +1,4 @@
+import 'package:desafio_konsi/app/features/locations/domain/usecases/search_locations_usecase.dart';
 import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:desafio_konsi/app/core/services/database/database_helper.dart';
@@ -52,12 +53,13 @@ Future<void> init() async {
       () => GetLocationsUsecase(repository: sl<ILocationsRepository>()));
   sl.registerLazySingleton(
       () => AddLocationUsecase(repository: sl<ILocationsRepository>()));
+  sl.registerLazySingleton(
+      () => SearchLocationsUsecase(repository: sl<ILocationsRepository>()));
 
   // **Controllers**
   sl.registerFactory(() => MapsController(
-        getLocationsUsecase: sl<GetLocationsUsecase>(),
+        searchLocationsUsecase: sl<SearchLocationsUsecase>(),
       ));
-
   sl.registerFactory(() => LocationsController(
         getLocationsUsecase: sl<GetLocationsUsecase>(),
       ));
