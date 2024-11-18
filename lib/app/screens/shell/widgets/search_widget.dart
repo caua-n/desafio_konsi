@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart';
+
+class SearchWidget extends StatelessWidget {
+  final String hintText;
+  final ValueChanged<String>? onChanged;
+  final TextEditingController? controller;
+
+  const SearchWidget({
+    super.key,
+    this.hintText = "Search...",
+    this.onChanged,
+    this.controller,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: TextField(
+        controller: controller,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          hintText: hintText,
+          border: InputBorder.none,
+          icon: const Icon(Icons.search),
+        ),
+      ),
+    );
+  }
+}

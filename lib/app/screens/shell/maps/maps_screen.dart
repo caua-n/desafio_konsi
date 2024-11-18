@@ -4,6 +4,7 @@ import 'package:desafio_konsi/app/core/services/service_locator.dart';
 import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:desafio_konsi/app/screens/shell/maps/interactors/controllers/maps_controller.dart';
 import 'package:desafio_konsi/app/screens/shell/maps/interactors/states/maps_state.dart';
+import 'package:desafio_konsi/app/screens/shell/widgets/search_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
@@ -23,12 +24,10 @@ class _MapsScreenState extends State<MapsScreen> {
   Timer? _debounceTimer;
 
   void _onTextChanged(String value) {
-    // Cancelar o debounce anterior, se existir
     if (_debounceTimer != null && _debounceTimer!.isActive) {
       _debounceTimer!.cancel();
     }
 
-    // Configurar um novo debounce
     _debounceTimer = Timer(const Duration(milliseconds: 500), () {
       controller.searchLocations(value);
     });
@@ -39,6 +38,7 @@ class _MapsScreenState extends State<MapsScreen> {
     super.initState();
     controller = sl<MapsControllerImpl>();
     controller.addListener(listener);
+    controller.initializer();
     mapController = MapController();
   }
 
@@ -66,80 +66,67 @@ class _MapsScreenState extends State<MapsScreen> {
       appBar: AppBar(
         title: const Text('Maps Screen'),
       ),
-      body: Column(
-        children: [
-          TextField(
-            controller: _input,
-            onChanged: _onTextChanged,
-            decoration: InputDecoration(
-              labelText: 'Digite algo',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-            ),
-          ),
-          ValueListenableBuilder(
-              valueListenable: controller,
-              builder: (context, state, child) {
-                return switch (state) {
-                  LoadedMapsState(:final listLocationsEntity) => SizedBox(
-                      height: 100,
-                      child: CustomScrollView(
-                        slivers: <Widget>[
-                          SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                  childCount: listLocationsEntity!.length,
-                                  (BuildContext context, int index) {
-                            final location = listLocationsEntity[index];
-                            return SizedBox(
-                              height: 100,
-                              child: ListTile(
-                                title: Text(location.street),
-                                onTap: () {
-                                  moveTo(
-                                    location.coordinates.latitude,
-                                    location.coordinates.longitude,
-                                  );
-                                },
-                              ),
-                            );
-                          }))
-                        ],
-                      ),
+      body: ValueListenableBuilder(
+          valueListenable: controller,
+          builder: (context, state, child) {
+            return switch (state) {
+              LoadingState() => const CircularProgressIndicator(),
+              LoadedMapsState(:final initialCoordinatesEntity) => Stack(
+                  alignment: Alignment.topCenter,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: SearchWidget(),
                     ),
-                  ErrorState(:final exception) =>
-                    Center(child: Text('Erro: $exception')),
-                  _ => Center(child: Text('Estado desconhecido: $state')),
-                };
-              }),
-          SizedBox(
-            height: 300,
-            child: FlutterMap(
-              mapController: mapController,
-              options: const MapOptions(
-                initialCenter:
-                    LatLng(51.509364, -0.128928), // Ponto inicial do mapa
-                initialZoom: 9.2,
-              ),
-              children: [
-                TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.example.app',
-                ),
-                RichAttributionWidget(
-                  attributions: [
-                    // TextSourceAttribution(
-                    //   'OpenStreetMap contributors',
-                    //   onTap: () => launchUrl(
-                    //       Uri.parse('https://openstreetmap.org/copyright')),
-                    // ),
+                    FlutterMap(
+                      mapController: mapController,
+                      options: MapOptions(
+                        initialCenter: LatLng(
+                          initialCoordinatesEntity.latitude,
+                          initialCoordinatesEntity.longitude,
+                        ),
+                        initialZoom: 17.0,
+                        onTap: (tapPosition, point) {},
+                      ),
+                      children: [
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          userAgentPackageName: 'com.example.app',
+                        ),
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              point: LatLng(
+                                initialCoordinatesEntity.latitude,
+                                initialCoordinatesEntity.longitude,
+                              ),
+                              child: const Icon(
+                                Icons.location_pin,
+                                color: Colors.red,
+                                size: 30,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const RichAttributionWidget(
+                          attributions: [
+                            // TextSourceAttribution(
+                            //   'OpenStreetMap contributors',
+                            //   onTap: () => launchUrl(
+                            //       Uri.parse('https://openstreetmap.org/copyright')),
+                            // ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
-          ),
-        ],
-      ),
+              ErrorState(:final exception) =>
+                Center(child: Text('Erro: $exception')),
+              _ => Center(child: Text('Estado desconhecido: $state')),
+            };
+          }),
     );
   }
 }
