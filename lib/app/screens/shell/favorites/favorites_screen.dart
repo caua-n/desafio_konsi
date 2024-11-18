@@ -1,23 +1,23 @@
 import 'package:desafio_konsi/app/core/states/base_state.dart';
-import 'package:desafio_konsi/app/screens/shell/locations/interactors/controllers/locations_controller.dart';
-import 'package:desafio_konsi/app/screens/shell/locations/interactors/states/locations_state.dart';
+import 'package:desafio_konsi/app/screens/shell/favorites/interactors/controllers/favorites_controller.dart';
+import 'package:desafio_konsi/app/screens/shell/favorites/interactors/states/favorites_state.dart';
 import 'package:flutter/material.dart';
 import 'package:desafio_konsi/app/core/services/service_locator.dart';
 
-class LocationsScreen extends StatefulWidget {
-  const LocationsScreen({super.key});
+class FavoritesScreen extends StatefulWidget {
+  const FavoritesScreen({super.key});
 
   @override
-  State<LocationsScreen> createState() => _LocationsScreenState();
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
 }
 
-class _LocationsScreenState extends State<LocationsScreen> {
-  late final LocationsController controller;
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  late final FavortesControllerImpl controller;
 
   @override
   void initState() {
     super.initState();
-    controller = sl<LocationsController>();
+    controller = sl<FavortesControllerImpl>();
     controller.addListener(listener);
     controller.loadLocations();
   }
@@ -44,7 +44,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
               InitialState() => const Center(
                   child: CircularProgressIndicator(),
                 ),
-              LoadedLocationsState(:final listLocationsEntity) =>
+              LoadedFavoritesState(:final listLocationsEntity) =>
                 CustomScrollView(
                   slivers: <Widget>[
                     SliverList(
@@ -53,7 +53,7 @@ class _LocationsScreenState extends State<LocationsScreen> {
                             (BuildContext context, int index) {
                       final location = listLocationsEntity[index];
                       return ListTile(
-                        title: Text(location.address),
+                        title: Text(location.street),
                       );
                     }))
                   ],

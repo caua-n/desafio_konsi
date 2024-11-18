@@ -37,7 +37,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
     if (location.startsWith('/maps')) {
       return 0;
     }
-    if (location.startsWith('/locations')) {
+    if (location.startsWith('/favorites')) {
       return 1;
     }
     return 0;
@@ -48,7 +48,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
       case 0:
         GoRouter.of(context).go('/maps');
       case 1:
-        GoRouter.of(context).go('/locations');
+        GoRouter.of(context).go('/favorites');
     }
   }
 }

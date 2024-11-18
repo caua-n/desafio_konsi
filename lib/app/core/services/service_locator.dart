@@ -1,4 +1,5 @@
 import 'package:desafio_konsi/app/features/locations/domain/usecases/search_locations_usecase.dart';
+import 'package:desafio_konsi/app/screens/shell/favorites/interactors/controllers/favorites_controller.dart';
 import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:desafio_konsi/app/core/services/database/database_helper.dart';
@@ -12,7 +13,6 @@ import 'package:desafio_konsi/app/features/locations/domain/repositories/i_locat
 import 'package:desafio_konsi/app/features/locations/domain/usecases/add_location_usecase.dart';
 import 'package:desafio_konsi/app/features/locations/domain/usecases/get_locations_usecase.dart';
 import 'package:desafio_konsi/app/screens/shell/maps/interactors/controllers/maps_controller.dart';
-import 'package:desafio_konsi/app/screens/shell/locations/interactors/controllers/locations_controller.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -57,10 +57,10 @@ Future<void> init() async {
       () => SearchLocationsUsecase(repository: sl<ILocationsRepository>()));
 
   // **Controllers**
-  sl.registerFactory(() => MapsController(
+  sl.registerFactory(() => MapsControllerImpl(
         searchLocationsUsecase: sl<SearchLocationsUsecase>(),
       ));
-  sl.registerFactory(() => LocationsController(
+  sl.registerFactory(() => FavortesControllerImpl(
         getLocationsUsecase: sl<GetLocationsUsecase>(),
       ));
 }

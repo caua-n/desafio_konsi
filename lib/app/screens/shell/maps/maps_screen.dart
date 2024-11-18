@@ -17,7 +17,8 @@ class MapsScreen extends StatefulWidget {
 }
 
 class _MapsScreenState extends State<MapsScreen> {
-  late final MapsController controller;
+  late final MapsControllerImpl controller;
+  late final MapController mapController;
   final TextEditingController _input = TextEditingController();
   Timer? _debounceTimer;
 
@@ -36,11 +37,20 @@ class _MapsScreenState extends State<MapsScreen> {
   @override
   void initState() {
     super.initState();
-    controller = sl<MapsController>();
+    controller = sl<MapsControllerImpl>();
     controller.addListener(listener);
+    mapController = MapController();
   }
 
   void listener() {}
+
+  void moveTo(String latitude, String longitute) {
+    final latLng = LatLng(
+      double.parse(latitude),
+      double.parse(longitute),
+    );
+    mapController.move(latLng, 15.0);
+  }
 
   @override
   void dispose() {
@@ -84,7 +94,13 @@ class _MapsScreenState extends State<MapsScreen> {
                             return SizedBox(
                               height: 100,
                               child: ListTile(
-                                title: Text(location.cep),
+                                title: Text(location.street),
+                                onTap: () {
+                                  moveTo(
+                                    location.coordinates.latitude,
+                                    location.coordinates.longitude,
+                                  );
+                                },
                               ),
                             );
                           }))
@@ -99,6 +115,7 @@ class _MapsScreenState extends State<MapsScreen> {
           SizedBox(
             height: 300,
             child: FlutterMap(
+              mapController: mapController,
               options: const MapOptions(
                 initialCenter:
                     LatLng(51.509364, -0.128928), // Ponto inicial do mapa

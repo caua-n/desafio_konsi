@@ -1,4 +1,4 @@
-import 'package:desafio_konsi/app/screens/shell/locations/locations_screen.dart';
+import 'package:desafio_konsi/app/screens/shell/favorites/favorites_screen.dart';
 import 'package:desafio_konsi/app/screens/shell/maps/maps_screen.dart';
 import 'package:desafio_konsi/app/screens/shell/widgets/app_bar.dart';
 import 'package:desafio_konsi/app/screens/splash/splash_screen.dart';
@@ -29,9 +29,9 @@ final GoRouter router = GoRouter(
           },
         ),
         GoRoute(
-          path: '/locations',
+          path: '/favorites',
           builder: (BuildContext context, GoRouterState state) {
-            return const LocationsScreen();
+            return const FavoritesScreen();
           },
         ),
       ],
