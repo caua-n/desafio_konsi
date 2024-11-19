@@ -40,7 +40,9 @@ class LocationsRepositoryImpl implements ILocationsRepository {
       final remoteData = await datasource.searchCEP(cep);
 
       if (remoteData.isEmpty) {
-        return const Failure(DefaultException(message: 'CEP não encontrado.'));
+        return const Failure(DefaultException(
+            message:
+                'CEP não encontrado.')); //TODO: TRATAR MELHOR SE CEP N FOR ENCONTRADO
       }
 
       final locationEntity = LocationAdapter.fromJson(remoteData);
@@ -65,7 +67,8 @@ class LocationsRepositoryImpl implements ILocationsRepository {
         'cep': place.postalCode,
         'state': place.administrativeArea,
         'city': place.subAdministrativeArea,
-        'neighbourhood': place.subLocality,
+        'neighborhood': place
+            .subLocality, //ALTERADO POR CONTA DO BRASILAPI, ESCREVERAM ERRADO!
         'street': place.street,
         'location': {
           'coordinates': {

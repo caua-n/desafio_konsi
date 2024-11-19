@@ -11,7 +11,7 @@ class LocationAdapter {
         postalCode: data['cep'] ?? '',
         state: data['state'] ?? '',
         city: data['city'] ?? '',
-        neighbourhood: data['neighbourhood'] ?? '',
+        neighbourhood: data['neighborhood'] ?? '',
         street: data['street'] ?? '',
         coordinates:
             data['location'] != null && data['location']['coordinates'] != null

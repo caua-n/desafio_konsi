@@ -34,7 +34,7 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
 
     final newState = result.fold(
       (coordinates) {
-        //   _placedLocation = coordinates;
+        _placedLocation = coordinates;
         return LoadedMapsState(currentCoordinatesEntity: coordinates);
       },
       (error) {
@@ -49,6 +49,7 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
   void searchPostalCode(String cep) async {
     //talvez levar para uma tela de resultado, para tratar estado por estado com outro maps_state só que equivalente, como search_state
     update(LoadingState());
+    notifyListeners();
 
     final result = await searchPostalCodeUsecase(cep);
     final newState = result.fold(
@@ -59,6 +60,7 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
     );
 
     update(newState);
+    notifyListeners();
   }
 
   Future<void> searchCoordinates(
@@ -67,7 +69,7 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
       CoordinatesModel(latitude: latitude, longitude: longitude),
     );
 
-    result.fold(
+    final newState = result.fold(
       (location) {
         final latlong = LatLng(
             location.coordinates.latitude, location.coordinates.longitude);
@@ -78,11 +80,25 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
         final String description =
             '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}';
         showSelectedPoint(context, title, description);
-        notifyListeners();
+
+        return LoadedMapsState(currentCoordinatesEntity: location.coordinates);
       },
       (error) {
         print('Erro ao buscar localização: ${error.message}');
+        return ErrorState(error);
       },
     );
+
+    update(newState);
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _placedLocation = null;
+
+    map.dispose();
+
+    super.dispose();
   }
 }
