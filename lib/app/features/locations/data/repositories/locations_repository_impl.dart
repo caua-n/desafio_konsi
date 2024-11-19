@@ -55,6 +55,7 @@ class LocationsRepositoryImpl implements ILocationsRepository {
     }
   }
 
+  //TODO: estudar se essa função precisa de um repository pra isso, ja que é de outra api
   @override
   Future<Output<LocationEntity>> searchCoordinates(
       double latitude, double longitude) async {

@@ -8,6 +8,8 @@ class LocationEntity extends Entity {
   final String neighbourhood;
   final String street;
   final CoordinatesEntity coordinates;
+  final int? number;
+  final String? complement;
 
   LocationEntity(
     super.id, {
@@ -17,5 +19,7 @@ class LocationEntity extends Entity {
     required this.neighbourhood,
     required this.street,
     required this.coordinates,
+    this.number,
+    this.complement,
   });
 }
