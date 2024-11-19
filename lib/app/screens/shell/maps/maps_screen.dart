@@ -16,7 +16,6 @@ class MapsScreen extends StatefulWidget {
 
 class _MapsScreenState extends State<MapsScreen> {
   late final MapsControllerImpl controller;
-  final TextEditingController _input = TextEditingController();
 
   @override
   void initState() {
@@ -146,17 +145,20 @@ class _MapsScreenState extends State<MapsScreen> {
                     _ => Center(child: Text('Estado desconhecido: $state')),
                   };
                 }),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: SearchWidget(
-                controller: _input,
-                onChanged: (value) {
-                  //validar
-
-                  controller.searchPostalCode(value);
-                },
-              ),
-            ),
+            ValueListenableBuilder(
+                valueListenable: controller,
+                builder: (context, state, child) {
+                  return Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: SearchWidget(
+                      controller: controller.searchInput,
+                      onChanged: (value) {
+                        //validar
+                        controller.searchPostalCode(value);
+                      },
+                    ),
+                  );
+                }),
           ],
         ),
       ),

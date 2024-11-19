@@ -18,19 +18,30 @@ class LocalLocationsDatasource implements LocationsDatasource {
   }
 
   @override
-  Future<void> saveLocations(List<Map<String, dynamic>> locations) async {
+  Future<void> addLocation(Map<String, dynamic> location) async {
     final db = await database;
 
-    await db.delete(DatabaseHelper.tableLocations);
-
-    for (final location in locations) {
-      await db.insert(
-        DatabaseHelper.tableLocations,
-        location,
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-    }
+    await db.insert(
+      DatabaseHelper.tableLocations,
+      location,
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
+
+  // @override
+  // Future<void> saveLocations(List<Map<String, dynamic>> locations) async {
+  //   final db = await database;
+
+  //   await db.delete(DatabaseHelper.tableLocations);
+
+  //   for (final location in locations) {
+  //     await db.insert(
+  //       DatabaseHelper.tableLocations,
+  //       location,
+  //       conflictAlgorithm: ConflictAlgorithm.replace,
+  //     );
+  //   }
+  // }
 
   @override
   Future<Map<String, dynamic>> searchCEP(String cep) {

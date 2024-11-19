@@ -4,6 +4,7 @@ void showSelectedPoint(
   BuildContext context,
   String title,
   String description,
+  VoidCallback callback,
 ) async {
   showModalBottomSheet(
     context: context,
@@ -15,6 +16,7 @@ void showSelectedPoint(
       return SelectedPointBottomSheet(
         title: title,
         description: description,
+        callback: callback,
       );
     },
   );
@@ -23,11 +25,13 @@ void showSelectedPoint(
 class SelectedPointBottomSheet extends StatelessWidget {
   final String title;
   final String description;
+  final VoidCallback callback;
 
   const SelectedPointBottomSheet({
     super.key,
     required this.title,
     required this.description,
+    required this.callback,
   });
 
   @override
@@ -49,8 +53,8 @@ class SelectedPointBottomSheet extends StatelessWidget {
           Text(description),
           const Spacer(),
           ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Fechar'),
+            onPressed: callback,
+            child: const Text('Salvar endereço'),
           ),
         ],
       ),

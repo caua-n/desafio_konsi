@@ -8,7 +8,7 @@ class LocationEntity extends Entity {
   final String neighbourhood;
   final String street;
   final CoordinatesEntity coordinates;
-  final int? number;
+  final String? number;
   final String? complement;
 
   LocationEntity(

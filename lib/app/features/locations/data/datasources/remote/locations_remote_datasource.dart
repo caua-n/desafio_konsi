@@ -27,6 +27,19 @@ class RemoteLocationsDatasource implements LocationsDatasource {
   }
 
   @override
+  Future<void> addLocation(Map<String, dynamic> location) async {
+    try {
+      await dio.post<Map<String, dynamic>>(
+        '$_apiUrl/add',
+        data: location,
+      );
+    } catch (e) {
+      print('Erro ao salvar localização remota: $e');
+      return;
+    }
+  }
+
+  @override
   Future<List<Map<String, dynamic>>> fetchSavedLocations() async {
     try {
       final response = await dio.get<Map<String, dynamic>>(_apiUrl);
@@ -42,11 +55,5 @@ class RemoteLocationsDatasource implements LocationsDatasource {
       print('Erro ao buscar localizações remotas: $e');
       return [];
     }
-  }
-
-  @override
-  Future<void> saveLocations(List<Map<String, dynamic>> locations) async {
-    throw UnsupportedError(
-        'Remote datasource não suporta salvar localizações.');
   }
 }

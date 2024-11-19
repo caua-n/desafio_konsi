@@ -5,8 +5,10 @@ import 'package:desafio_konsi/app/features/locations/domain/models/coordinates_m
 import 'package:desafio_konsi/app/features/locations/domain/usecases/get_current_localization_usecase.dart';
 import 'package:desafio_konsi/app/features/locations/domain/usecases/search_coordinates_usecase.dart';
 import 'package:desafio_konsi/app/features/locations/domain/usecases/search_postal_code_usecase.dart';
+import 'package:desafio_konsi/app/screens/revision/interactors/dtos/revision_dto.dart';
 import 'package:desafio_konsi/app/screens/shell/maps/interactors/states/maps_state.dart';
 import 'package:desafio_konsi/app/screens/shell/maps/widgets/selected_point_bottom_sheet.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -16,6 +18,7 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
   final SearchCoordinatesUsecase searchCoordinatesUsecase;
   final GetCurrentLocalizationUsecase getCurrentLocalizationUsecase;
   final MapController map = MapController();
+  final TextEditingController searchInput = TextEditingController();
 
   MapsControllerImpl({
     required this.searchPostalCodeUsecase,
@@ -47,7 +50,6 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
   }
 
   void searchPostalCode(String cep) async {
-    //talvez levar para uma tela de resultado, para tratar estado por estado com outro maps_state só que equivalente, como search_state
     update(LoadingState());
     notifyListeners();
 
@@ -76,10 +78,14 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
         map.moveAndRotate(latlong, 17.0, 0.0);
         _placedLocation = location.coordinates;
 
-        final String title = location.postalCode;
-        final String description =
-            '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}';
-        showSelectedPoint(context, title, description);
+        showSelectedPoint(context, location.postalCode,
+            '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
+            () {
+          context.pushNamed(
+            'revision',
+            extra: RevisionDto(location: location),
+          );
+        });
 
         return LoadedMapsState(currentCoordinatesEntity: location.coordinates);
       },

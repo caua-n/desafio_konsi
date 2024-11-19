@@ -1,5 +1,5 @@
 abstract class LocationsDatasource {
   Future<List<Map<String, dynamic>>> fetchSavedLocations();
-  Future<void> saveLocations(List<Map<String, dynamic>> locations);
+  Future<void> addLocation(Map<String, dynamic> location);
   Future<Map<String, dynamic>> searchCEP(String cep);
 }

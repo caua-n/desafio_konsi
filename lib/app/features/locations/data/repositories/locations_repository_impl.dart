@@ -14,8 +14,41 @@ class LocationsRepositoryImpl implements ILocationsRepository {
   LocationsRepositoryImpl(this.datasource);
 
   @override
-  Future<Output<LocationEntity>> addLocation() {
-    throw UnimplementedError();
+  Future<Output<LocationEntity>> addLocation(
+      LocationEntity location, String number, String complement) async {
+    try {
+      final locationJson = LocationAdapter.toJson(location);
+//vai ficar assim com o addAll
+//       {
+//   "id": ,
+//   "cep": "",
+//   "state": "",
+//   "city": "",
+//   "neighborhood": "",
+//   "street": "",
+//   "location": {
+//     "type": "",
+//     "coordinates": {
+//       "latitude": ,
+//       "longitude":
+//     }
+//   },
+//   "number": "",
+//   "complement": ""
+// }
+      locationJson.addAll({
+        'number': number,
+        'complement': complement,
+      });
+
+      await datasource.addLocation(locationJson);
+
+      return Success(location);
+    } catch (e) {
+      print('Erro no repositório: $e');
+      return const Failure(
+          DefaultException(message: 'Erro ao salvar localização.'));
+    }
   }
 
   @override
