@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:desafio_konsi/app/core/controllers/controllers.dart';
 import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:desafio_konsi/app/features/locations/domain/entities/location_entity.dart';
@@ -23,20 +25,19 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
     required this.searchPostalCodeUsecase,
     required this.searchCoordinatesUsecase,
     required this.getCurrentLocalizationUsecase,
-  }) : super(InitialState());
+  }) : super(MapsState(markers: {}));
 
   void getCurrentLocalization() async {
     final result = await getCurrentLocalizationUsecase();
 
     final newState = result.fold(
       (coordinates) {
-        final marker = Marker(
-          markerId: MarkerId('placed_location'),
-          position: LatLng(coordinates.latitude, coordinates.longitude),
+        _updateMapLocation(
+          latitude: coordinates.latitude,
+          longitude: coordinates.longitude,
+          markerId: 'placed_location',
         );
-        markers[MarkerId('placed_location')] = marker;
-
-        return LoadedMapsState(currentCoordinatesEntity: coordinates);
+        return MapsState(markers: markers);
       },
       (error) {
         return LocalizationDeniedState(reason: error.message);
@@ -47,47 +48,25 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
     notifyListeners();
   }
 
-  void searchPostalCode(String cep) async {
-    update(LoadingState());
-    notifyListeners();
+  Future<void> searchCoordinates(double latitude, double longitude,
+      {required void Function(LocationEntity) onComplete}) async {
+    await Future.delayed(Duration(milliseconds: 1000));
 
-    final result = await searchPostalCodeUsecase(cep);
-    final newState = result.fold(
-      (data) {
-        return SearchResultState(listLocationsEntity: data);
-      },
-      ErrorState.new,
-    );
-
-    update(newState);
-    notifyListeners();
-  }
-
-  Future<void> searchCoordinates(
-    double latitude,
-    double longitude, {
-    required void Function(LocationEntity) onComplete,
-  }) async {
     final result = await searchCoordinatesUsecase(
       CoordinatesModel(latitude: latitude, longitude: longitude),
     );
 
     final newState = result.fold(
       (location) {
-        final latlong = LatLng(
-            location.coordinates.latitude, location.coordinates.longitude);
-        final cameraUpdate = CameraUpdate.newLatLng(latlong);
-        final marker = Marker(
-          markerId: MarkerId('placed_location'),
-          position: LatLng(
-              location.coordinates.latitude, location.coordinates.longitude),
+        _updateMapLocation(
+          latitude: location.coordinates.latitude,
+          longitude: location.coordinates.longitude,
+          markerId: 'placed_location',
         );
-        markers[MarkerId('placed_location')] = marker;
-        googleMaps.animateCamera(cameraUpdate);
 
         onComplete(location);
 
-        return LoadedMapsState(currentCoordinatesEntity: location.coordinates);
+        return MapsState(markers: markers);
       },
       (error) {
         print('Erro ao buscar localização: ${error.message}');
@@ -99,9 +78,32 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
     notifyListeners();
   }
 
-  @override
-  void dispose() {
-    googleMaps.dispose();
-    super.dispose();
+  void searchPostalCode(String cep) async {
+    final result = await searchPostalCodeUsecase(cep);
+    final newState = result.fold(
+      (data) {
+        return SearchResultState(markers: markers, listLocationsEntity: data);
+      },
+      ErrorState.new,
+    );
+
+    update(newState);
+    notifyListeners();
+  }
+
+  Future<void> _updateMapLocation({
+    required double latitude,
+    required double longitude,
+    required String markerId,
+  }) async {
+    final latitudeLongitude = LatLng(latitude, longitude);
+    final marker = Marker(
+      markerId: MarkerId(markerId),
+      position: latitudeLongitude,
+    );
+
+    markers[MarkerId(markerId)] = marker;
+    await googleMaps
+        .animateCamera(CameraUpdate.newLatLngZoom(latitudeLongitude, 17.0));
   }
 }

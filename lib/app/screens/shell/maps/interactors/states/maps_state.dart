@@ -1,20 +1,18 @@
 import 'package:desafio_konsi/app/core/states/base_state.dart';
-import 'package:desafio_konsi/app/features/locations/domain/entities/coordinates_entity.dart';
-
 import 'package:desafio_konsi/app/features/locations/domain/entities/location_entity.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class LoadedMapsState extends BaseState {
-  final CoordinatesEntity currentCoordinatesEntity;
+class MapsState extends BaseState {
+  final Map<MarkerId, Marker> markers;
 
-  LoadedMapsState({
-    required this.currentCoordinatesEntity,
-  });
+  MapsState({required this.markers});
 }
 
-class SearchResultState extends BaseState {
+class SearchResultState extends MapsState {
   final List<LocationEntity> listLocationsEntity;
 
   SearchResultState({
+    required super.markers,
     required this.listLocationsEntity,
   });
 }
