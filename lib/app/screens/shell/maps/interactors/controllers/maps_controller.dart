@@ -18,26 +18,27 @@ class MapsControllerImpl extends BaseController<BaseState> {
   final GetCurrentLocalizationUsecase getCurrentLocalizationUsecase;
 
   late GoogleMapController googleMaps;
-  final TextEditingController searchInput = TextEditingController();
   Map<MarkerId, Marker> markers = {};
+  final FocusNode searchFocusNode = FocusNode();
+  final ValueNotifier<bool> isSearchFocused = ValueNotifier(false);
+  final TextEditingController searchInput = TextEditingController();
 
   MapsControllerImpl({
     required this.searchPostalCodeUsecase,
     required this.searchCoordinatesUsecase,
     required this.getCurrentLocalizationUsecase,
-  }) : super(MapsState(markers: {}));
+  }) : super(MapsState());
 
   void getCurrentLocalization() async {
     final result = await getCurrentLocalizationUsecase();
 
     final newState = result.fold(
       (coordinates) {
-        _updateMapLocation(
-          latitude: coordinates.latitude,
-          longitude: coordinates.longitude,
-          markerId: 'placed_location',
-        );
-        return MapsState(markers: markers);
+        final latitudeLongitude =
+            LatLng(coordinates.latitude, coordinates.longitude);
+        googleMaps
+            .animateCamera(CameraUpdate.newLatLngZoom(latitudeLongitude, 17.0));
+        return MapsState();
       },
       (error) {
         return LocalizationDeniedState(reason: error.message);
@@ -49,23 +50,28 @@ class MapsControllerImpl extends BaseController<BaseState> {
 
   Future<void> searchCoordinates(double latitude, double longitude,
       {required void Function(LocationEntity) onComplete}) async {
-    await Future.delayed(Duration(milliseconds: 1000));
-
+    searchFocusNode.unfocus();
     final result = await searchCoordinatesUsecase(
       CoordinatesModel(latitude: latitude, longitude: longitude),
     );
 
     final newState = result.fold(
       (location) {
-        _updateMapLocation(
-          latitude: location.coordinates.latitude,
-          longitude: location.coordinates.longitude,
-          markerId: 'placed_location',
+        final latitudeLongitude = LatLng(
+            location.coordinates.latitude, location.coordinates.longitude);
+        final marker = Marker(
+          markerId: const MarkerId('placed_location'),
+          position: latitudeLongitude,
         );
+
+        markers[const MarkerId('placed_location')] = marker;
+
+        googleMaps
+            .animateCamera(CameraUpdate.newLatLngZoom(latitudeLongitude, 17.0));
 
         onComplete(location);
 
-        return MapsState(markers: markers);
+        return MapsState();
       },
       (error) {
         print('Erro ao buscar localização: ${error.message}');
@@ -80,27 +86,11 @@ class MapsControllerImpl extends BaseController<BaseState> {
     final result = await searchPostalCodeUsecase(cep);
     final newState = result.fold(
       (data) {
-        return SearchResultState(markers: markers, listLocationsEntity: data);
+        return SearchResultState(listLocationsEntity: data);
       },
       ErrorState.new,
     );
 
     update(newState);
-  }
-
-  Future<void> _updateMapLocation({
-    required double latitude,
-    required double longitude,
-    required String markerId,
-  }) async {
-    final latitudeLongitude = LatLng(latitude, longitude);
-    final marker = Marker(
-      markerId: MarkerId(markerId),
-      position: latitudeLongitude,
-    );
-
-    markers[MarkerId(markerId)] = marker;
-    await googleMaps
-        .animateCamera(CameraUpdate.newLatLngZoom(latitudeLongitude, 17.0));
   }
 }

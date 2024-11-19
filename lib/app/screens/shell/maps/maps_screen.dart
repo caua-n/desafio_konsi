@@ -25,6 +25,10 @@ class _MapsScreenState extends State<MapsScreen> {
     controller = sl<MapsControllerImpl>();
     controller.addListener(listener);
     controller.getCurrentLocalization();
+
+    controller.searchFocusNode.addListener(() {
+      controller.isSearchFocused.value = controller.searchFocusNode.hasFocus;
+    });
   }
 
   void listener() {}
@@ -33,12 +37,30 @@ class _MapsScreenState extends State<MapsScreen> {
   void dispose() {
     controller.removeListener(listener);
     controller.dispose();
+
+    controller.searchFocusNode.dispose();
+    controller.isSearchFocused.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: ValueListenableBuilder<bool>(
+        valueListenable: controller.isSearchFocused,
+        builder: (context, isFocused, child) {
+          if (isFocused) {
+            return FloatingActionButton(
+              onPressed: () {
+                controller.searchPostalCode(controller.searchInput.text);
+              },
+              child: const Icon(Icons.search),
+            );
+          }
+          return const SizedBox
+              .shrink(); // Não exibe FAB se o campo não está focado
+        },
+      ),
       body: SafeArea(
         child: Stack(
           alignment: Alignment.topCenter,
@@ -49,6 +71,11 @@ class _MapsScreenState extends State<MapsScreen> {
                 return Opacity(
                   opacity: state is MapsState ? 1.0 : 0.0,
                   child: GoogleMap(
+                    zoomControlsEnabled: false,
+                    mapToolbarEnabled: false,
+                    compassEnabled: false,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: false,
                     initialCameraPosition: const CameraPosition(
                       zoom: 2.0,
                       target: LatLng(-15.6000, -56.1000),
@@ -183,7 +210,7 @@ class _MapsScreenState extends State<MapsScreen> {
                 return Opacity(
                   opacity: 1.0,
                   child: Center(
-                    child: Text('Erro: $exception'),
+                    child: Text(exception.message),
                   ),
                 );
               },
@@ -195,6 +222,7 @@ class _MapsScreenState extends State<MapsScreen> {
                 return Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: SearchWidget(
+                    focusNode: controller.searchFocusNode,
                     controller: controller.searchInput,
                     onSubmit: (value) {
                       controller.searchPostalCode(value);
