@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:desafio_konsi/app/features/locations/data/datasources/locations_datasource.dart';
+import 'package:desafio_konsi/app/features/locations/data/datasources/i_locations_datasource.dart';
 
 const _apiUrl = 'https://konsi.com/api/locations'; //falhara propositalmente
 
-class RemoteLocationsDatasource implements LocationsDatasource {
+class RemoteLocationsDatasource implements ILocationsDatasource {
   final Dio dio;
 
   RemoteLocationsDatasource(this.dio);
@@ -40,7 +40,7 @@ class RemoteLocationsDatasource implements LocationsDatasource {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> fetchSavedLocations() async {
+  Future<List<Map<String, dynamic>>> getLocations() async {
     try {
       final response = await dio.get<Map<String, dynamic>>(_apiUrl);
 

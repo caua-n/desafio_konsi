@@ -1,10 +1,10 @@
-import 'package:desafio_konsi/app/features/locations/data/datasources/locations_datasource.dart';
+import 'package:desafio_konsi/app/features/locations/data/datasources/i_locations_datasource.dart';
 
-class FallbackLocationsDatasource implements LocationsDatasource {
-  final LocationsDatasource remoteDatasource;
-  final LocationsDatasource localDatasource;
+class LocationsDatasourceImpl implements ILocationsDatasource {
+  final ILocationsDatasource remoteDatasource;
+  final ILocationsDatasource localDatasource;
 
-  FallbackLocationsDatasource({
+  LocationsDatasourceImpl({
     required this.remoteDatasource,
     required this.localDatasource,
   });
@@ -26,9 +26,9 @@ class FallbackLocationsDatasource implements LocationsDatasource {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> fetchSavedLocations() async {
+  Future<List<Map<String, dynamic>>> getLocations() async {
     try {
-      final remoteData = await remoteDatasource.fetchSavedLocations();
+      final remoteData = await remoteDatasource.getLocations();
 
       if (remoteData.isNotEmpty) {
         for (final location in remoteData) {
@@ -36,10 +36,10 @@ class FallbackLocationsDatasource implements LocationsDatasource {
         }
         return remoteData;
       }
-      return await localDatasource.fetchSavedLocations();
+      return await localDatasource.getLocations();
     } catch (e) {
       print('Erro ao buscar localizações remotas, usando local: $e');
-      return await localDatasource.fetchSavedLocations();
+      return await localDatasource.getLocations();
     }
   }
 

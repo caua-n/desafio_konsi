@@ -1,14 +1,14 @@
 import 'package:desafio_konsi/app/core/services/database/database_helper.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:desafio_konsi/app/features/locations/data/datasources/locations_datasource.dart';
+import 'package:desafio_konsi/app/features/locations/data/datasources/i_locations_datasource.dart';
 
-class LocalLocationsDatasource implements LocationsDatasource {
+class LocalLocationsDatasource implements ILocationsDatasource {
   final Future<Database> database;
 
   LocalLocationsDatasource(this.database);
 
   @override
-  Future<List<Map<String, dynamic>>> fetchSavedLocations() async {
+  Future<List<Map<String, dynamic>>> getLocations() async {
     final db = await database;
 
     final List<Map<String, dynamic>> result =

@@ -7,8 +7,5 @@ abstract class ILocationsRepository {
       LocationEntity selectedLocation, String number, String complement);
   Future<Output<List<LocationEntity>>> getLocations();
   Future<Output<List<LocationEntity>>> searchPostalCode(String cep);
-  Future<Output<LocationEntity>> searchCoordinates(
-    double lat,
-    double long,
-  );
+  Future<Output<LocationEntity>> searchCoordinates(double lat, double long);
 }

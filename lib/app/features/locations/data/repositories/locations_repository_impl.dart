@@ -2,14 +2,14 @@ import 'package:desafio_konsi/app/core/errors/base_exception.dart';
 import 'package:desafio_konsi/app/core/errors/default_exception.dart';
 import 'package:desafio_konsi/app/core/types/types.dart';
 import 'package:desafio_konsi/app/features/locations/data/adapters/location_adapter.dart';
-import 'package:desafio_konsi/app/features/locations/data/datasources/locations_datasource.dart';
+import 'package:desafio_konsi/app/features/locations/data/datasources/i_locations_datasource.dart';
 import 'package:desafio_konsi/app/features/locations/domain/entities/location_entity.dart';
 import 'package:desafio_konsi/app/features/locations/domain/repositories/i_locations_repository.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:result_dart/result_dart.dart';
 
 class LocationsRepositoryImpl implements ILocationsRepository {
-  final LocationsDatasource datasource;
+  final ILocationsDatasource datasource;
 
   LocationsRepositoryImpl(this.datasource);
 
@@ -18,24 +18,6 @@ class LocationsRepositoryImpl implements ILocationsRepository {
       LocationEntity location, String number, String complement) async {
     try {
       final locationJson = LocationAdapter.toJson(location);
-//vai ficar assim com o addAll
-//       {
-//   "id": ,
-//   "cep": "",
-//   "state": "",
-//   "city": "",
-//   "neighborhood": "",
-//   "street": "",
-//   "location": {
-//     "type": "",
-//     "coordinates": {
-//       "latitude": ,
-//       "longitude":
-//     }
-//   },
-//   "number": "",
-//   "complement": ""
-// }
       locationJson.addAll({
         'number': number,
         'complement': complement,
@@ -54,7 +36,7 @@ class LocationsRepositoryImpl implements ILocationsRepository {
   @override
   Future<Output<List<LocationEntity>>> getLocations() async {
     try {
-      final data = await datasource.fetchSavedLocations();
+      final data = await datasource.getLocations();
 
       final listLocationsEntity =
           data.map((location) => LocationAdapter.fromSql(location)).toList();

@@ -2,13 +2,12 @@ import 'package:desafio_konsi/app/screens/revision/interactors/dtos/revision_dto
 import 'package:desafio_konsi/app/screens/shell/maps/widgets/selected_point_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:desafio_konsi/app/core/services/get_it/service_locator.dart';
 import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:desafio_konsi/app/screens/shell/maps/interactors/controllers/maps_controller.dart';
 import 'package:desafio_konsi/app/screens/shell/maps/interactors/states/maps_state.dart';
 import 'package:desafio_konsi/app/screens/widgets/search_widget.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapsScreen extends StatefulWidget {
   const MapsScreen({super.key});
@@ -48,72 +47,48 @@ class _MapsScreenState extends State<MapsScreen> {
                 valueListenable: controller,
                 builder: (context, state, child) {
                   return switch (state) {
-                    LoadingState() => const CircularProgressIndicator(),
+                    // InitialState() => FlutterMap(
+                    //     options: const MapOptions(
+                    //       initialCenter: LatLng(-15.6000, -56.1000),
+                    //       initialZoom: 4.0,
+                    //     ),
+                    //     children: [
+                    //       TileLayer(
+                    //         urlTemplate:
+                    //             'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    //         userAgentPackageName: 'com.example.app',
+                    //       ),
+                    //     ],
+                    //   ),
                     LoadedMapsState(:final currentCoordinatesEntity) =>
-                      FlutterMap(
-                        mapController: controller.map,
-                        options: MapOptions(
-                          initialCenter: LatLng(
-                            currentCoordinatesEntity.latitude,
-                            currentCoordinatesEntity.longitude,
-                          ),
-                          initialZoom: 17.0,
-                          onTap: (tapPosition, point) {
-                            controller.searchCoordinates(
-                              point.latitude,
-                              point.longitude,
-                              onComplete: (location) {
-                                showSelectedPoint(
-                                  context,
-                                  location.postalCode,
-                                  '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
-                                  () {
-                                    context.pushNamed(
-                                      'revision',
-                                      extra: RevisionDto(location: location),
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          },
-                        ),
-                        children: [
-                          TileLayer(
-                            urlTemplate:
-                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            userAgentPackageName: 'com.example.app',
-                          ),
-                          // MarkerLayer(
-                          //   markers: [
-
-                          //   ],
-                          // ),
-                          if (controller.placedLocation != null)
-                            MarkerLayer(
-                              markers: [
-                                Marker(
-                                  point: LatLng(
-                                      controller.placedLocation!.latitude,
-                                      controller.placedLocation!.longitude),
-                                  child: const Icon(
-                                    Icons.location_pin,
-                                    color: Colors.red,
-                                    size: 30,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          const RichAttributionWidget(
-                            attributions: [
-                              // TextSourceAttribution(
-                              //   'OpenStreetMap contributors',
-                              //   onTap: () => launchUrl(
-                              //       Uri.parse('https://openstreetmap.org/copyright')),
-                              // ),
-                            ],
-                          ),
-                        ],
+                      GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                            zoom: 17.0,
+                            target: LatLng(currentCoordinatesEntity.latitude,
+                                currentCoordinatesEntity.longitude)),
+                        onMapCreated: (control) {
+                          controller.googleMaps = control;
+                        },
+                        markers: controller.markers.values.toSet(),
+                        onTap: (point) {
+                          controller.searchCoordinates(
+                            point.latitude,
+                            point.longitude,
+                            onComplete: (location) {
+                              showSelectedPoint(
+                                context,
+                                location.postalCode,
+                                '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
+                                () {
+                                  context.pushNamed(
+                                    'revision',
+                                    extra: RevisionDto(location: location),
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
                       ),
                     SearchResultState(:final listLocationsEntity) =>
                       CustomScrollView(
