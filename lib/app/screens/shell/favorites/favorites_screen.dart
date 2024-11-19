@@ -1,9 +1,12 @@
 import 'package:desafio_konsi/app/core/states/base_state.dart';
+import 'package:desafio_konsi/app/screens/revision/interactors/dtos/revision_dto.dart';
 import 'package:desafio_konsi/app/screens/shell/favorites/interactors/controllers/favorites_controller.dart';
 import 'package:desafio_konsi/app/screens/shell/favorites/interactors/states/favorites_state.dart';
 import 'package:desafio_konsi/app/screens/widgets/search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:desafio_konsi/app/core/services/get_it/service_locator.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:go_router/go_router.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -61,8 +64,40 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                             childCount: listLocationsEntity.length,
                             (BuildContext context, int index) {
                       final location = listLocationsEntity[index];
-                      return ListTile(
-                        title: Text(location.postalCode),
+                      return Slidable(
+                        key: ValueKey(location.street),
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) {
+                                context.pushNamed(
+                                  'revision',
+                                  extra: RevisionDto(
+                                      location: location,
+                                      type: RevisionType.update),
+                                );
+                              },
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              icon: Icons.edit,
+                              label: 'Editar',
+                            ),
+                            SlidableAction(
+                              onPressed: (context) {
+                                controller.deleteLocation(location.id ?? 0);
+                              },
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Excluir',
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          title: Text(location.postalCode),
+                          subtitle: Text(location.complement ?? ''),
+                        ),
                       );
                     }))
                   ],
@@ -75,3 +110,4 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
   }
 }
+//controller.deleteLocation(location.id ?? 0);

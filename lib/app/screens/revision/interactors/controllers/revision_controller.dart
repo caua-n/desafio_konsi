@@ -2,13 +2,12 @@ import 'package:desafio_konsi/app/core/controllers/controllers.dart';
 import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:desafio_konsi/app/features/locations/domain/entities/location_entity.dart';
 import 'package:desafio_konsi/app/features/locations/domain/usecases/add_location_usecase.dart';
-
+import 'package:desafio_konsi/app/features/locations/domain/usecases/update_location_usecase.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-class RevisionControllerImpl extends BaseController<BaseState>
-    with ChangeNotifier {
+class RevisionControllerImpl extends BaseController<BaseState> {
   final AddLocationUsecase addLocationUsecase;
+  final UpdateLocationUsecase updateLocationUsecase;
 
   final TextEditingController postalCodeController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
@@ -17,13 +16,14 @@ class RevisionControllerImpl extends BaseController<BaseState>
 
   RevisionControllerImpl({
     required this.addLocationUsecase,
+    required this.updateLocationUsecase,
   }) : super(InitialState());
 
-  void addLocation(
-    BuildContext context, {
+  void addLocation({
     required LocationEntity selectedLocation,
     required String number,
     required String complement,
+    required void Function() onSuccess,
   }) async {
     final result = await addLocationUsecase(
       (
@@ -35,18 +35,27 @@ class RevisionControllerImpl extends BaseController<BaseState>
 
     result.fold(
       (location) {
-        context.go('/favorites');
+        onSuccess();
       },
       (error) {
         return ErrorState(error);
       },
     );
-
-    notifyListeners();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  void updateLocation({
+    required LocationEntity selectedLocation,
+    required void Function() onSuccess,
+  }) async {
+    final result = await updateLocationUsecase(selectedLocation);
+
+    result.fold(
+      (location) {
+        onSuccess();
+      },
+      (error) {
+        return ErrorState(error);
+      },
+    );
   }
 }

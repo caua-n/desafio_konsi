@@ -39,7 +39,7 @@ class LocationsRepositoryImpl implements ILocationsRepository {
       final data = await datasource.getLocations();
 
       final listLocationsEntity =
-          data.map((location) => LocationAdapter.fromSql(location)).toList();
+          data.map((location) => LocationAdapter.fromJson(location)).toList();
 
       return Success(listLocationsEntity);
     } on BaseException catch (e) {
@@ -50,14 +50,42 @@ class LocationsRepositoryImpl implements ILocationsRepository {
   }
 
   @override
+  Future<Output<bool>> deleteLocation(int locationId) async {
+    try {
+      await datasource.deleteLocation(locationId);
+
+      return const Success(true);
+    } on BaseException catch (e) {
+      return Failure(DefaultException(message: e.message));
+    } catch (e) {
+      return const Failure(DefaultException(
+          message: 'Erro desconhecido ao deletar localização.'));
+    }
+  }
+
+  @override
+  Future<Output<bool>> updateLocation(LocationEntity location) async {
+    try {
+      final locationJson = LocationAdapter.toJson(location);
+
+      await datasource.updateLocation(locationJson);
+
+      return const Success(true);
+    } on BaseException catch (e) {
+      return Failure(DefaultException(message: e.message));
+    } catch (e) {
+      return const Failure(DefaultException(
+          message: 'Erro desconhecido ao atualizar localização.'));
+    }
+  }
+
+  @override
   Future<Output<List<LocationEntity>>> searchPostalCode(String cep) async {
     try {
       final remoteData = await datasource.searchCEP(cep);
 
       if (remoteData.isEmpty) {
-        return const Failure(DefaultException(
-            message:
-                'CEP não encontrado.')); //TODO: TRATAR MELHOR SE CEP N FOR ENCONTRADO
+        return const Failure(DefaultException(message: 'CEP não encontrado.'));
       }
 
       final locationEntity = LocationAdapter.fromJson(remoteData);
@@ -70,7 +98,6 @@ class LocationsRepositoryImpl implements ILocationsRepository {
     }
   }
 
-  //TODO: estudar se essa função precisa de um repository pra isso, ja que é de outra api
   @override
   Future<Output<LocationEntity>> searchCoordinates(
       double latitude, double longitude) async {
@@ -83,8 +110,8 @@ class LocationsRepositoryImpl implements ILocationsRepository {
         'cep': place.postalCode,
         'state': place.administrativeArea,
         'city': place.subAdministrativeArea,
-        'neighborhood': place
-            .subLocality, //ALTERADO POR CONTA DO BRASILAPI, ESCREVERAM ERRADO!
+        'neighborhood':
+            place.subLocality, // Altere conforme os padrões do BrasilAPI
         'street': place.street,
         'location': {
           'coordinates': {

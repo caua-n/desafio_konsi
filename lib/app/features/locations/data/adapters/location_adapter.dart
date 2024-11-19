@@ -13,24 +13,9 @@ class LocationAdapter {
         city: data['city'] ?? '',
         neighbourhood: data['neighborhood'] ?? '',
         street: data['street'] ?? '',
-        coordinates:
-            CoordinatesAdapter.fromJson(data['location']['coordinates']),
-      );
-    } catch (e) {
-      throw AdapterException(message: e.toString());
-    }
-  }
-
-  static LocationEntity fromSql(Map<String, dynamic> data) {
-    try {
-      return LocationEntity(
-        data['id'] ?? -1,
-        postalCode: data['cep'] ?? '',
-        state: data['state'] ?? '',
-        city: data['city'] ?? '',
-        neighbourhood: data['neighbourhood'] ?? '',
-        street: data['street'] ?? '',
-        coordinates: CoordinatesAdapter.fromJson(data['coordinates']),
+        coordinates: CoordinatesAdapter.fromJson(
+          data['location']?['coordinates'] ?? data['coordinates'],
+        ),
       );
     } catch (e) {
       throw AdapterException(message: e.toString());

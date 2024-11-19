@@ -94,4 +94,12 @@ class MapsControllerImpl extends BaseController<BaseState> {
 
     update(newState);
   }
+
+  @override
+  void dispose() {
+    searchFocusNode.dispose();
+    isSearchFocused.dispose();
+    searchInput.dispose();
+    super.dispose();
+  }
 }

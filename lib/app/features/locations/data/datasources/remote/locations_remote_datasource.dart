@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:desafio_konsi/app/features/locations/data/datasources/i_locations_datasource.dart';
 
-const _apiUrl = 'https://konsi.com/api/locations'; //falhara propositalmente
+const _apiUrl = 'https://konsi.com/api/locations'; // URL base da API
 
 class RemoteLocationsDatasource implements ILocationsDatasource {
   final Dio dio;
@@ -35,7 +35,7 @@ class RemoteLocationsDatasource implements ILocationsDatasource {
       );
     } catch (e) {
       print('Erro ao salvar localização remota: $e');
-      throw Exception();
+      throw Exception('Erro ao adicionar localização remotamente.');
     }
   }
 
@@ -54,6 +54,45 @@ class RemoteLocationsDatasource implements ILocationsDatasource {
     } catch (e) {
       print('Erro ao buscar localizações remotas: $e');
       return [];
+    }
+  }
+
+  @override
+  Future<void> deleteLocation(int locationId) async {
+    try {
+      final response = await dio.delete<Map<String, dynamic>>(
+        '$_apiUrl/$locationId',
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Falha ao deletar localização com ID: $locationId.');
+      }
+    } catch (e) {
+      print('Erro ao deletar localização remota: $e');
+      throw Exception('Erro ao deletar localização remotamente.');
+    }
+  }
+
+  @override
+  Future<void> updateLocation(Map<String, dynamic> location) async {
+    if (!location.containsKey('id') || location['id'] == null) {
+      throw Exception('ID da localização é obrigatório para a atualização.');
+    }
+
+    final int locationId = location['id'];
+
+    try {
+      final response = await dio.put<Map<String, dynamic>>(
+        '$_apiUrl/$locationId',
+        data: location,
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Falha ao atualizar localização com ID: $locationId.');
+      }
+    } catch (e) {
+      print('Erro ao atualizar localização remota: $e');
+      throw Exception('Erro ao atualizar localização remotamente.');
     }
   }
 }

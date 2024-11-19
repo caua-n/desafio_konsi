@@ -18,7 +18,7 @@ class DatabaseHelper {
     final path = await getDatabasesPath();
     return openDatabase(
       join(path, 'locations.db'),
-      version: 2, // Atualize a versão para incluir as novas colunas
+      version: 2,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE $tableLocations (

@@ -1,9 +1,11 @@
 import 'package:desafio_konsi/app/core/services/localization/localization_service.dart';
 import 'package:desafio_konsi/app/features/locations/data/repositories/localization_repository_impl.dart';
 import 'package:desafio_konsi/app/features/locations/domain/repositories/i_localization_repository.dart';
+import 'package:desafio_konsi/app/features/locations/domain/usecases/delete_location_usecase.dart';
 import 'package:desafio_konsi/app/features/locations/domain/usecases/get_current_localization_usecase.dart';
 import 'package:desafio_konsi/app/features/locations/domain/usecases/search_coordinates_usecase.dart';
 import 'package:desafio_konsi/app/features/locations/domain/usecases/search_postal_code_usecase.dart';
+import 'package:desafio_konsi/app/features/locations/domain/usecases/update_location_usecase.dart';
 import 'package:desafio_konsi/app/screens/revision/interactors/controllers/revision_controller.dart';
 import 'package:desafio_konsi/app/screens/shell/favorites/interactors/controllers/favorites_controller.dart';
 import 'package:dio/dio.dart';
@@ -64,6 +66,10 @@ Future<void> init() async {
   sl.registerLazySingleton(
       () => AddLocationUsecase(repository: sl<ILocationsRepository>()));
   sl.registerLazySingleton(
+      () => UpdateLocationUsecase(repository: sl<ILocationsRepository>()));
+  sl.registerLazySingleton(
+      () => DeleteLocationUsecase(repository: sl<ILocationsRepository>()));
+  sl.registerLazySingleton(
       () => SearchPostalCodeUsecase(repository: sl<ILocationsRepository>()));
   sl.registerLazySingleton(
       () => SearchCoordinatesUsecase(repository: sl<ILocationsRepository>()));
@@ -80,8 +86,10 @@ Future<void> init() async {
 
   sl.registerFactory(() => FavoritesControllerImpl(
         getLocationsUsecase: sl<GetLocationsUsecase>(),
+        deleteLocationUsecase: sl<DeleteLocationUsecase>(),
       ));
 
-  sl.registerFactory(() =>
-      RevisionControllerImpl(addLocationUsecase: sl<AddLocationUsecase>()));
+  sl.registerFactory(() => RevisionControllerImpl(
+      addLocationUsecase: sl<AddLocationUsecase>(),
+      updateLocationUsecase: sl<UpdateLocationUsecase>()));
 }

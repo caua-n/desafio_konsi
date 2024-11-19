@@ -38,8 +38,6 @@ class _MapsScreenState extends State<MapsScreen> {
     controller.removeListener(listener);
     controller.dispose();
 
-    controller.searchFocusNode.dispose();
-    controller.isSearchFocused.dispose();
     super.dispose();
   }
 
@@ -81,7 +79,8 @@ class _MapsScreenState extends State<MapsScreen> {
                             () {
                               context.pushNamed(
                                 'revision',
-                                extra: RevisionDto(location: location),
+                                extra: RevisionDto(
+                                    location: location, type: RevisionType.add),
                               );
                             },
                           );
@@ -139,7 +138,8 @@ class _MapsScreenState extends State<MapsScreen> {
                                               context.pushNamed(
                                                 'revision',
                                                 extra: RevisionDto(
-                                                    location: location),
+                                                    location: location,
+                                                    type: RevisionType.add),
                                               );
                                             },
                                           );
@@ -170,7 +170,9 @@ class _MapsScreenState extends State<MapsScreen> {
                                   () {
                                     context.pushNamed(
                                       'revision',
-                                      extra: RevisionDto(location: location),
+                                      extra: RevisionDto(
+                                          location: location,
+                                          type: RevisionType.add),
                                     );
                                   },
                                 );

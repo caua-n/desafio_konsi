@@ -44,12 +44,42 @@ class LocationsDatasourceImpl implements ILocationsDatasource {
   }
 
   @override
+  Future<void> deleteLocation(int locationId) async {
+    try {
+      await remoteDatasource.deleteLocation(locationId);
+    } catch (e) {
+      print('Falha ao deletar remotamente, tentando localmente: $e');
+      try {
+        await localDatasource.deleteLocation(locationId);
+      } catch (localError) {
+        print('Erro ao deletar localmente após falha remota: $localError');
+        throw Exception(
+            'Falha ao deletar localização remotamente e localmente.');
+      }
+    }
+  }
+
+  @override
+  Future<void> updateLocation(Map<String, dynamic> location) async {
+    try {
+      await remoteDatasource.updateLocation(location);
+    } catch (e) {
+      print('Falha na atualização remota, tentando localmente: $e');
+      try {
+        await localDatasource.updateLocation(location);
+      } catch (localError) {
+        print('Erro ao atualizar localmente após falha remota: $localError');
+        throw Exception(
+            'Falha ao atualizar localização remotamente e localmente.');
+      }
+    }
+  }
+
+  @override
   Future<Map<String, dynamic>> searchCEP(String cep) async {
     try {
-      // Sempre usa a fonte remota para buscar CEP
       return await remoteDatasource.searchCEP(cep);
     } catch (e) {
-      // Em caso de erro, lança uma exceção
       print('Erro ao buscar CEP remotamente: $e');
       throw Exception('Erro ao buscar CEP.');
     }

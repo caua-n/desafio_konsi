@@ -122,15 +122,30 @@ class _RevisionScreenState extends State<RevisionScreen> {
                                 onPressed: () {
                                   if (_formKey.currentState?.validate() ==
                                       true) {
-                                    controller.addLocation(
-                                      context,
-                                      selectedLocation:
-                                          widget.revisionDto.location,
-                                      number: controller
-                                          .numberController.value.text,
-                                      complement: controller
-                                          .complementController.value.text,
-                                    );
+                                    switch (widget.revisionDto.type) {
+                                      case RevisionType.add:
+                                        controller.addLocation(
+                                          onSuccess: () {
+                                            context.go('/favorites');
+                                          },
+                                          selectedLocation:
+                                              widget.revisionDto.location,
+                                          number: controller
+                                              .numberController.value.text,
+                                          complement: controller
+                                              .complementController.value.text,
+                                        );
+                                        break;
+                                      case RevisionType.update:
+                                        controller.updateLocation(
+                                            selectedLocation:
+                                                widget.revisionDto.location,
+                                            onSuccess: () {
+                                              context.go('/favorites');
+                                            });
+                                        break;
+                                      default:
+                                    }
                                   }
                                 },
                                 child: const Text('Enviar'),

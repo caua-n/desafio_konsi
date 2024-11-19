@@ -56,8 +56,52 @@ class LocalLocationsDatasource implements ILocationsDatasource {
   }
 
   @override
+  Future<void> deleteLocation(int locationId) async {
+    final db = await database;
+
+    final result = await db.delete(
+      DatabaseHelper.tableLocations,
+      where: '${DatabaseHelper.columnId} = ?',
+      whereArgs: [locationId],
+    );
+
+    if (result == 0) {
+      throw Exception('Falha ao deletar a localização com ID $locationId.');
+    }
+  }
+
+  @override
+  Future<void> updateLocation(Map<String, dynamic> location) async {
+    final db = await database;
+
+    if (!location.containsKey('id') || location['id'] == null) {
+      throw Exception('ID da localização é obrigatório para a atualização.');
+    }
+
+    final int locationId = location['id'];
+    final latitude = location['location']['coordinates']['latitude'];
+    final longitude = location['location']['coordinates']['longitude'];
+
+    final updatedData = {
+      'cep': location['cep'],
+      'state': location['state'],
+      'city': location['city'],
+      'neighbourhood': location['neighbourhood'],
+      'street': location['street'],
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+
+    await db.update(
+      DatabaseHelper.tableLocations,
+      updatedData,
+      where: '${DatabaseHelper.columnId} = ?',
+      whereArgs: [locationId],
+    );
+  }
+
+  @override
   Future<Map<String, dynamic>> searchCEP(String cep) {
-    // TODO: implement searchCEP
     throw UnimplementedError();
   }
 }

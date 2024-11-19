@@ -1,6 +1,7 @@
 import 'package:desafio_konsi/app/core/controllers/controllers.dart';
 import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:desafio_konsi/app/features/locations/domain/entities/location_entity.dart';
+import 'package:desafio_konsi/app/features/locations/domain/usecases/delete_location_usecase.dart';
 
 import 'package:desafio_konsi/app/features/locations/domain/usecases/get_locations_usecase.dart';
 import 'package:desafio_konsi/app/screens/shell/favorites/interactors/states/favorites_state.dart';
@@ -8,8 +9,10 @@ import 'package:flutter/material.dart';
 
 class FavoritesControllerImpl extends BaseController<BaseState> {
   final GetLocationsUsecase getLocationsUsecase;
+  final DeleteLocationUsecase deleteLocationUsecase;
 
-  FavoritesControllerImpl({required this.getLocationsUsecase})
+  FavoritesControllerImpl(
+      {required this.getLocationsUsecase, required this.deleteLocationUsecase})
       : super(InitialState());
 
   final TextEditingController searchInput = TextEditingController();
@@ -28,6 +31,11 @@ class FavoritesControllerImpl extends BaseController<BaseState> {
     );
 
     update(newState);
+  }
+
+  void deleteLocation(int locationId) async {
+    await deleteLocationUsecase.call(locationId);
+    loadLocations();
   }
 
   void filterLocations(String query) {
