@@ -46,21 +46,6 @@ class _MapsScreenState extends State<MapsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: ValueListenableBuilder<bool>(
-        valueListenable: controller.isSearchFocused,
-        builder: (context, isFocused, child) {
-          if (isFocused) {
-            return FloatingActionButton(
-              onPressed: () {
-                controller.searchPostalCode(controller.searchInput.text);
-              },
-              child: const Icon(Icons.search),
-            );
-          }
-          return const SizedBox
-              .shrink(); // Não exibe FAB se o campo não está focado
-        },
-      ),
       body: SafeArea(
         child: Stack(
           alignment: Alignment.topCenter,
@@ -107,7 +92,6 @@ class _MapsScreenState extends State<MapsScreen> {
                 );
               },
             ),
-
             ValueListenableBuilder(
               valueListenable: controller,
               builder: (context, state, child) {
@@ -121,48 +105,78 @@ class _MapsScreenState extends State<MapsScreen> {
                   opacity: 1.0,
                   child: Container(
                     color: Colors.white,
-                    child: CustomScrollView(
-                      slivers: [
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 100,
-                          ),
-                        ),
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (sliverContext, index) {
-                              final location = listLocationsEntity[index];
-                              return ListTile(
-                                leading: CircleAvatar(
-                                  child: Text(location.id.toString()),
-                                ),
-                                title: Text(location.postalCode),
-                                subtitle: Text(
-                                  '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
-                                ),
-                                onTap: () {
-                                  controller.searchCoordinates(
-                                    location.coordinates.latitude,
-                                    location.coordinates.longitude,
-                                    onComplete: (location) {
-                                      showSelectedPoint(
-                                        context,
-                                        location.postalCode,
-                                        '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
-                                        () {
-                                          context.pushNamed(
-                                            'revision',
-                                            extra:
-                                                RevisionDto(location: location),
+                    child: Stack(
+                      children: [
+                        CustomScrollView(
+                          slivers: [
+                            const SliverToBoxAdapter(
+                              child: SizedBox(
+                                height: 100,
+                              ),
+                            ),
+                            SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (sliverContext, index) {
+                                  final location = listLocationsEntity[index];
+                                  return ListTile(
+                                    leading: CircleAvatar(
+                                      child: Text(location.id.toString()),
+                                    ),
+                                    title: Text(location.postalCode),
+                                    subtitle: Text(
+                                      '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
+                                    ),
+                                    onTap: () {
+                                      controller.searchCoordinates(
+                                        location.coordinates.latitude,
+                                        location.coordinates.longitude,
+                                        onComplete: (location) {
+                                          showSelectedPoint(
+                                            context,
+                                            location.postalCode,
+                                            '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
+                                            () {
+                                              context.pushNamed(
+                                                'revision',
+                                                extra: RevisionDto(
+                                                    location: location),
+                                              );
+                                            },
                                           );
                                         },
                                       );
                                     },
                                   );
                                 },
-                              );
+                                childCount: listLocationsEntity.length,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Positioned(
+                          right: 20,
+                          bottom: 20,
+                          child: FloatingActionButton(
+                            onPressed: () {
+                              final location = listLocationsEntity.first;
+                              controller.searchCoordinates(
+                                  location.coordinates.latitude,
+                                  location.coordinates.longitude,
+                                  onComplete: (location) {
+                                showSelectedPoint(
+                                  context,
+                                  location.postalCode,
+                                  '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
+                                  () {
+                                    context.pushNamed(
+                                      'revision',
+                                      extra: RevisionDto(location: location),
+                                    );
+                                  },
+                                );
+                              });
                             },
-                            childCount: listLocationsEntity.length,
+                            child: const Icon(Icons.search),
                           ),
                         ),
                       ],
@@ -171,7 +185,6 @@ class _MapsScreenState extends State<MapsScreen> {
                 );
               },
             ),
-
             ValueListenableBuilder(
               valueListenable: controller,
               builder: (context, state, child) {
@@ -197,7 +210,6 @@ class _MapsScreenState extends State<MapsScreen> {
                 );
               },
             ),
-
             ValueListenableBuilder(
               valueListenable: controller,
               builder: (context, state, child) {
@@ -215,7 +227,6 @@ class _MapsScreenState extends State<MapsScreen> {
                 );
               },
             ),
-            // Search Widget
             ValueListenableBuilder(
               valueListenable: controller,
               builder: (context, state, child) {

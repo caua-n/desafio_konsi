@@ -35,8 +35,7 @@ class FavoritesControllerImpl extends BaseController<BaseState> {
       filteredList = List.from(originalList);
     } else {
       filteredList = originalList
-          .where((location) =>
-              location.street.toLowerCase().contains(query.toLowerCase()))
+          .where((location) => location.postalCode.contains(query))
           .toList();
     }
     update(LoadedFavoritesState(listLocationsEntity: filteredList));

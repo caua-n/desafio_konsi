@@ -62,7 +62,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                             (BuildContext context, int index) {
                       final location = listLocationsEntity[index];
                       return ListTile(
-                        title: Text(location.street),
+                        title: Text(location.postalCode),
                       );
                     }))
                   ],

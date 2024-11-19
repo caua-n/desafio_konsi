@@ -86,6 +86,7 @@ class MapsControllerImpl extends BaseController<BaseState> {
     final result = await searchPostalCodeUsecase(cep);
     final newState = result.fold(
       (data) {
+        searchFocusNode.unfocus();
         return SearchResultState(listLocationsEntity: data);
       },
       ErrorState.new,
