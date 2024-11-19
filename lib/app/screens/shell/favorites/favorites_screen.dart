@@ -2,7 +2,7 @@ import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:desafio_konsi/app/screens/shell/favorites/interactors/controllers/favorites_controller.dart';
 import 'package:desafio_konsi/app/screens/shell/favorites/interactors/states/favorites_state.dart';
 import 'package:flutter/material.dart';
-import 'package:desafio_konsi/app/core/services/service_locator.dart';
+import 'package:desafio_konsi/app/core/services/get_it/service_locator.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});

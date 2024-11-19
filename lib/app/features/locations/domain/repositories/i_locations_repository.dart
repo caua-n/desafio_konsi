@@ -4,6 +4,7 @@ import 'package:desafio_konsi/app/features/locations/domain/entities/location_en
 
 abstract class ILocationsRepository {
   Future<Output<LocationEntity>> addLocation();
-  Future<Output<List<LocationEntity>>> getSavedLocations();
-  Future<Output<List<LocationEntity>>> searchLocations(String cep);
+  Future<Output<List<LocationEntity>>> getLocations();
+  Future<Output<List<LocationEntity>>> searchPostalCode(String cep);
+  Future<Output<LocationEntity>> searchCoordinates(double lat, double long);
 }

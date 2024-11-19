@@ -1,6 +1,7 @@
 import 'package:desafio_konsi/app/core/services/localization/localization_service.dart';
-import 'package:desafio_konsi/app/features/locations/domain/usecases/get_initial_localization_usecase.dart';
-import 'package:desafio_konsi/app/features/locations/domain/usecases/search_locations_usecase.dart';
+import 'package:desafio_konsi/app/features/locations/domain/usecases/get_current_localization_usecase.dart';
+import 'package:desafio_konsi/app/features/locations/domain/usecases/search_coordinates_usecase.dart';
+import 'package:desafio_konsi/app/features/locations/domain/usecases/search_postal_code_usecase.dart';
 import 'package:desafio_konsi/app/screens/shell/favorites/interactors/controllers/favorites_controller.dart';
 import 'package:dio/dio.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -59,14 +60,17 @@ Future<void> init() async {
   sl.registerLazySingleton(
       () => AddLocationUsecase(repository: sl<ILocationsRepository>()));
   sl.registerLazySingleton(
-      () => SearchLocationsUsecase(repository: sl<ILocationsRepository>()));
+      () => SearchPostalCodeUsecase(repository: sl<ILocationsRepository>()));
   sl.registerLazySingleton(
-      () => GetInitialLocalizationUsecase(sl<LocalizationService>()));
+      () => SearchCoordinatesUsecase(repository: sl<ILocationsRepository>()));
+  sl.registerLazySingleton(
+      () => GetCurrentLocalizationUsecase(sl<LocalizationService>()));
 
   // **Controllers**
   sl.registerFactory(() => MapsControllerImpl(
-        searchLocationsUsecase: sl<SearchLocationsUsecase>(),
-        getCurrentLocalizationUsecase: sl<GetInitialLocalizationUsecase>(),
+        searchPostalCodeUsecase: sl<SearchPostalCodeUsecase>(),
+        searchCoordinatesUsecase: sl<SearchCoordinatesUsecase>(),
+        getCurrentLocalizationUsecase: sl<GetCurrentLocalizationUsecase>(),
       ));
   sl.registerFactory(() => FavortesControllerImpl(
         getLocationsUsecase: sl<GetLocationsUsecase>(),

@@ -1,8 +1,8 @@
 import 'package:desafio_konsi/app/core/entities/entity.dart';
 
 class CoordinatesEntity extends Entity {
-  final String longitude;
-  final String latitude;
+  final double longitude;
+  final double latitude;
 
   CoordinatesEntity(
     super.id, {

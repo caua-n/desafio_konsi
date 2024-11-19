@@ -4,16 +4,16 @@ import 'package:desafio_konsi/app/core/usecases/usecases.dart';
 import 'package:desafio_konsi/app/features/locations/domain/entities/location_entity.dart';
 import 'package:desafio_konsi/app/features/locations/domain/repositories/i_locations_repository.dart';
 
-abstract class ISearchLocationsUsecase
+abstract class ISearchPostalCodeUsecase
     extends UseCase<List<LocationEntity>, String> {}
 
-class SearchLocationsUsecase extends ISearchLocationsUsecase {
+class SearchPostalCodeUsecase extends ISearchPostalCodeUsecase {
   final ILocationsRepository repository;
 
-  SearchLocationsUsecase({required this.repository});
+  SearchPostalCodeUsecase({required this.repository});
 
   @override
   Future<Output<List<LocationEntity>>> call(String params) async {
-    return await repository.searchLocations(params);
+    return await repository.searchPostalCode(params);
   }
 }

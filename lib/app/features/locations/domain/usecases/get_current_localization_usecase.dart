@@ -1,16 +1,16 @@
 import 'package:desafio_konsi/app/core/errors/default_exception.dart';
 import 'package:desafio_konsi/app/core/services/localization/localization_service.dart';
 import 'package:desafio_konsi/app/core/types/types.dart';
-import 'package:desafio_konsi/app/features/locations/data/adapters/initial_coordinates_adapter.dart';
-import 'package:desafio_konsi/app/features/locations/domain/entities/initial_coordinates_entity.dart';
+import 'package:desafio_konsi/app/features/locations/data/adapters/coordinates_adapter.dart';
+import 'package:desafio_konsi/app/features/locations/domain/entities/coordinates_entity.dart';
 import 'package:result_dart/result_dart.dart';
 
-class GetInitialLocalizationUsecase {
+class GetCurrentLocalizationUsecase {
   final LocalizationService localizationService;
 
-  GetInitialLocalizationUsecase(this.localizationService);
+  GetCurrentLocalizationUsecase(this.localizationService);
 
-  Future<Output<InitialCoordinatesEntity>> call() async {
+  Future<Output<CoordinatesEntity>> call() async {
     try {
       final position = await localizationService.getCurrentLocation();
 
@@ -20,11 +20,11 @@ class GetInitialLocalizationUsecase {
         'latitude': position.latitude,
       };
 
-      final coordinates = InitialCoordinatesAdapter.fromJson(data);
+      final coordinates = CoordinatesAdapter.fromJson(data);
 
       return Success(coordinates);
-    } catch (e) {
-      return const Failure(DefaultException(message: 'Erro desconhecido'));
+    } catch (error) {
+      return Failure(DefaultException(message: error.toString()));
     }
   }
 }

@@ -1,13 +1,13 @@
 import 'package:desafio_konsi/app/core/states/base_state.dart';
-import 'package:desafio_konsi/app/features/locations/domain/entities/initial_coordinates_entity.dart';
+import 'package:desafio_konsi/app/features/locations/domain/entities/coordinates_entity.dart';
 
 import 'package:desafio_konsi/app/features/locations/domain/entities/location_entity.dart';
 
 class LoadedMapsState extends BaseState {
-  final InitialCoordinatesEntity initialCoordinatesEntity;
+  final CoordinatesEntity currentCoordinatesEntity;
 
   LoadedMapsState({
-    required this.initialCoordinatesEntity,
+    required this.currentCoordinatesEntity,
   });
 }
 
@@ -16,5 +16,13 @@ class SearchResultState extends BaseState {
 
   SearchResultState({
     required this.listLocationsEntity,
+  });
+}
+
+class LocalizationDeniedState extends BaseState {
+  final String reason;
+
+  LocalizationDeniedState({
+    required this.reason,
   });
 }

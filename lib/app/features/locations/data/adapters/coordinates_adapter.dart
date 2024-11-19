@@ -6,8 +6,8 @@ class CoordinatesAdapter {
     try {
       return CoordinatesEntity(
         data['id'] ?? -1,
-        longitude: data['longitude'] ?? '',
-        latitude: data['latitude'] ?? '',
+        longitude: data['longitude'] ?? 0.0,
+        latitude: data['latitude'] ?? 0.0,
       );
     } catch (e) {
       throw AdapterException(message: e.toString());

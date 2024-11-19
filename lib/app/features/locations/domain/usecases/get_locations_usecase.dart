@@ -14,6 +14,6 @@ class GetLocationsUsecase extends IGetLocationsUsecase {
 
   @override
   Future<Output<List<LocationEntity>>> call([params]) async {
-    return await repository.getSavedLocations();
+    return await repository.getLocations();
   }
 }
