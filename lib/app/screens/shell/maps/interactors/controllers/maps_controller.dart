@@ -1,6 +1,7 @@
 import 'package:desafio_konsi/app/core/controllers/controllers.dart';
 import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:desafio_konsi/app/features/locations/domain/entities/coordinates_entity.dart';
+import 'package:desafio_konsi/app/features/locations/domain/entities/location_entity.dart';
 import 'package:desafio_konsi/app/features/locations/domain/models/coordinates_model.dart';
 import 'package:desafio_konsi/app/features/locations/domain/usecases/get_current_localization_usecase.dart';
 import 'package:desafio_konsi/app/features/locations/domain/usecases/search_coordinates_usecase.dart';
@@ -66,7 +67,10 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
   }
 
   Future<void> searchCoordinates(
-      BuildContext context, double latitude, double longitude) async {
+    double latitude,
+    double longitude, {
+    required void Function(LocationEntity) onComplete,
+  }) async {
     final result = await searchCoordinatesUsecase(
       CoordinatesModel(latitude: latitude, longitude: longitude),
     );
@@ -77,15 +81,7 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
             location.coordinates.latitude, location.coordinates.longitude);
         map.moveAndRotate(latlong, 17.0, 0.0);
         _placedLocation = location.coordinates;
-
-        showSelectedPoint(context, location.postalCode,
-            '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
-            () {
-          context.pushNamed(
-            'revision',
-            extra: RevisionDto(location: location),
-          );
-        });
+        onComplete(location);
 
         return LoadedMapsState(currentCoordinatesEntity: location.coordinates);
       },

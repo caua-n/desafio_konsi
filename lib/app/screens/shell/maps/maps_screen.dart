@@ -1,4 +1,7 @@
+import 'package:desafio_konsi/app/screens/revision/interactors/dtos/revision_dto.dart';
+import 'package:desafio_konsi/app/screens/shell/maps/widgets/selected_point_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:desafio_konsi/app/core/services/get_it/service_locator.dart';
@@ -57,7 +60,22 @@ class _MapsScreenState extends State<MapsScreen> {
                           initialZoom: 17.0,
                           onTap: (tapPosition, point) {
                             controller.searchCoordinates(
-                                context, point.latitude, point.longitude);
+                              point.latitude,
+                              point.longitude,
+                              onComplete: (location) {
+                                showSelectedPoint(
+                                  context,
+                                  location.postalCode,
+                                  '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
+                                  () {
+                                    context.pushNamed(
+                                      'revision',
+                                      extra: RevisionDto(location: location),
+                                    );
+                                  },
+                                );
+                              },
+                            );
                           },
                         ),
                         children: [
@@ -107,7 +125,7 @@ class _MapsScreenState extends State<MapsScreen> {
                           ),
                           SliverList(
                             delegate: SliverChildBuilderDelegate(
-                              (context, index) {
+                              (sliverContext, index) {
                                 final location = listLocationsEntity[index];
                                 return ListTile(
                                   leading: CircleAvatar(
@@ -117,11 +135,25 @@ class _MapsScreenState extends State<MapsScreen> {
                                   subtitle: Text(
                                     '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
                                   ),
-                                  onTap: () async {
+                                  onTap: () {
                                     controller.searchCoordinates(
-                                        context,
-                                        location.coordinates.latitude,
-                                        location.coordinates.longitude);
+                                      location.coordinates.latitude,
+                                      location.coordinates.longitude,
+                                      onComplete: (location) {
+                                        showSelectedPoint(
+                                          context,
+                                          location.postalCode,
+                                          '${location.street} - ${location.neighbourhood}, ${location.city} - ${location.state}',
+                                          () {
+                                            context.pushNamed(
+                                              'revision',
+                                              extra: RevisionDto(
+                                                  location: location),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    );
                                   },
                                 );
                               },

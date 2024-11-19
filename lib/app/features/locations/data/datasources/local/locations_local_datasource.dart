@@ -41,7 +41,7 @@ class LocalLocationsDatasource implements LocationsDatasource {
     await db.insert(
       DatabaseHelper.tableLocations,
       {
-        DatabaseHelper.columnId: location['id'],
+        DatabaseHelper.columnId: null,
         DatabaseHelper.columnCep: location['cep'],
         DatabaseHelper.columnState: location['state'],
         DatabaseHelper.columnCity: location['city'],
@@ -52,7 +52,6 @@ class LocalLocationsDatasource implements LocationsDatasource {
         DatabaseHelper.columnAddressNumber: location['number'],
         DatabaseHelper.columnComplement: location['complement'],
       },
-      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
