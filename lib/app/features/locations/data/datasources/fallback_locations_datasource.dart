@@ -12,12 +12,16 @@ class FallbackLocationsDatasource implements LocationsDatasource {
   @override
   Future<void> addLocation(Map<String, dynamic> location) async {
     try {
-      // Tenta salvar na fonte remota
       await remoteDatasource.addLocation(location);
     } catch (e) {
-      // Em caso de falha, salva localmente
       print('Falha no salvamento remoto, salvando localmente: $e');
-      await localDatasource.addLocation(location);
+      try {
+        await localDatasource.addLocation(location);
+      } catch (localError) {
+        print('Erro ao salvar localmente após falha remota: $localError');
+        throw Exception(
+            'Falha ao salvar localização remotamente e localmente.');
+      }
     }
   }
 
@@ -32,7 +36,6 @@ class FallbackLocationsDatasource implements LocationsDatasource {
         }
         return remoteData;
       }
-
       return await localDatasource.fetchSavedLocations();
     } catch (e) {
       print('Erro ao buscar localizações remotas, usando local: $e');

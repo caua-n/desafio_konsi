@@ -58,49 +58,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     }))
                   ],
                 ),
-              //Empty list state não desenhar nada por n ter sido requisitado, mostrar vazio mesmo
               ErrorState(:final exception) =>
                 Center(child: Text('Erro: $exception')),
               _ => Center(child: Text('Estado desconhecido: $state')),
             };
-            // FutureBuilder<List<LocationEntity>>(
-            //   future: _getLocationsUsecase(),
-            //   builder: (context, snapshot) {
-            //     if (snapshot.connectionState == ConnectionState.waiting) {
-            //       return const Center(child: CircularProgressIndicator());
-            //     } else if (snapshot.hasError) {
-            //       return Center(child: Text('Error: ${snapshot.error}'));
-            //     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            //       return const Center(child: Text('No locations available'));
-            //     } else {
-            //       // Localizações carregadas com sucesso
-            //       final locations = snapshot.data!;
-            //       return ListView.builder(
-            //         itemCount: locations.length,
-            //         itemBuilder: (context, index) {
-            //           final location = locations[index];
-            //           return ListTile(
-            //             leading:
-            //                 const Icon(Icons.location_on, color: Colors.blue),
-            //             title: Text(location.address),
-            //             subtitle: Text(
-            //               '${location.cep}, Número: ${location.addressNumber}${location.complement != null ? ', Complemento: ${location.complement}' : ''}',
-            //             ),
-            //             onTap: () {
-            //               // Ação ao clicar em uma localização
-            //               ScaffoldMessenger.of(context).showSnackBar(
-            //                 SnackBar(
-            //                   content: Text(
-            //                       'Localização selecionada: ${location.address}'),
-            //                 ),
-            //               );
-            //             },
-            //           );
-            //         },
-            //       );
-            //     }
-            //   },
-            // );
           }),
     );
   }

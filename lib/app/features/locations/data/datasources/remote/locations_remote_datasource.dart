@@ -35,7 +35,7 @@ class RemoteLocationsDatasource implements LocationsDatasource {
       );
     } catch (e) {
       print('Erro ao salvar localização remota: $e');
-      return;
+      throw Exception();
     }
   }
 

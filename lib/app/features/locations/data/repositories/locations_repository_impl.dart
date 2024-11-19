@@ -57,7 +57,7 @@ class LocationsRepositoryImpl implements ILocationsRepository {
       final data = await datasource.fetchSavedLocations();
 
       final listLocationsEntity =
-          data.map((location) => LocationAdapter.fromJson(location)).toList();
+          data.map((location) => LocationAdapter.fromSql(location)).toList();
 
       return Success(listLocationsEntity);
     } on BaseException catch (e) {

@@ -14,10 +14,23 @@ class LocationAdapter {
         neighbourhood: data['neighborhood'] ?? '',
         street: data['street'] ?? '',
         coordinates:
-            data['location'] != null && data['location']['coordinates'] != null
-                ? CoordinatesAdapter.fromJson(data['location']['coordinates'])
-                : throw const AdapterException(
-                    message: 'Campo location ou coordinates está ausente'),
+            CoordinatesAdapter.fromJson(data['location']['coordinates']),
+      );
+    } catch (e) {
+      throw AdapterException(message: e.toString());
+    }
+  }
+
+  static LocationEntity fromSql(Map<String, dynamic> data) {
+    try {
+      return LocationEntity(
+        data['id'] ?? -1,
+        postalCode: data['cep'] ?? '',
+        state: data['state'] ?? '',
+        city: data['city'] ?? '',
+        neighbourhood: data['neighbourhood'] ?? '',
+        street: data['street'] ?? '',
+        coordinates: CoordinatesAdapter.fromJson(data['coordinates']),
       );
     } catch (e) {
       throw AdapterException(message: e.toString());

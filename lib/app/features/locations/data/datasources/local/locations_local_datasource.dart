@@ -14,34 +14,47 @@ class LocalLocationsDatasource implements LocationsDatasource {
     final List<Map<String, dynamic>> result =
         await db.query(DatabaseHelper.tableLocations);
 
-    return result;
+    return result.map((location) {
+      final mutableLocation = Map<String, dynamic>.from(location);
+      mutableLocation['coordinates'] = {
+        'latitude': location[DatabaseHelper.columnLatitude],
+        'longitude': location[DatabaseHelper.columnLongitude],
+      };
+      return mutableLocation;
+    }).toList();
   }
 
   @override
   Future<void> addLocation(Map<String, dynamic> location) async {
     final db = await database;
 
+    if (location['location'] == null ||
+        location['location']['coordinates'] == null ||
+        location['location']['coordinates']['latitude'] == null ||
+        location['location']['coordinates']['longitude'] == null) {
+      throw Exception('Coordenadas inválidas ou ausentes no objeto location.');
+    }
+
+    final latitude = location['location']['coordinates']['latitude'];
+    final longitude = location['location']['coordinates']['longitude'];
+
     await db.insert(
       DatabaseHelper.tableLocations,
-      location,
+      {
+        DatabaseHelper.columnId: location['id'],
+        DatabaseHelper.columnCep: location['cep'],
+        DatabaseHelper.columnState: location['state'],
+        DatabaseHelper.columnCity: location['city'],
+        DatabaseHelper.columnNeighbourhood: location['neighbourhood'],
+        DatabaseHelper.columnStreet: location['street'],
+        DatabaseHelper.columnLatitude: latitude,
+        DatabaseHelper.columnLongitude: longitude,
+        DatabaseHelper.columnAddressNumber: location['number'],
+        DatabaseHelper.columnComplement: location['complement'],
+      },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
-
-  // @override
-  // Future<void> saveLocations(List<Map<String, dynamic>> locations) async {
-  //   final db = await database;
-
-  //   await db.delete(DatabaseHelper.tableLocations);
-
-  //   for (final location in locations) {
-  //     await db.insert(
-  //       DatabaseHelper.tableLocations,
-  //       location,
-  //       conflictAlgorithm: ConflictAlgorithm.replace,
-  //     );
-  //   }
-  // }
 
   @override
   Future<Map<String, dynamic>> searchCEP(String cep) {
