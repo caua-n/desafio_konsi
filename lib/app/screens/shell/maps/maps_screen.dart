@@ -50,7 +50,7 @@ class _MapsScreenState extends State<MapsScreen> {
                   opacity: state is MapsState ? 1.0 : 0.0,
                   child: GoogleMap(
                     initialCameraPosition: const CameraPosition(
-                      zoom: 5.0,
+                      zoom: 2.0,
                       target: LatLng(-15.6000, -56.1000),
                     ),
                     onMapCreated: (passController) {
@@ -196,7 +196,7 @@ class _MapsScreenState extends State<MapsScreen> {
                   padding: const EdgeInsets.all(20.0),
                   child: SearchWidget(
                     controller: controller.searchInput,
-                    onChanged: (value) {
+                    onSubmit: (value) {
                       controller.searchPostalCode(value);
                     },
                   ),

@@ -78,7 +78,7 @@ Future<void> init() async {
         getCurrentLocalizationUsecase: sl<GetCurrentLocalizationUsecase>(),
       ));
 
-  sl.registerFactory(() => FavortesControllerImpl(
+  sl.registerFactory(() => FavoritesControllerImpl(
         getLocationsUsecase: sl<GetLocationsUsecase>(),
       ));
 

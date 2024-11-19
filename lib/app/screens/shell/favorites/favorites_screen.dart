@@ -1,6 +1,7 @@
 import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:desafio_konsi/app/screens/shell/favorites/interactors/controllers/favorites_controller.dart';
 import 'package:desafio_konsi/app/screens/shell/favorites/interactors/states/favorites_state.dart';
+import 'package:desafio_konsi/app/screens/widgets/search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:desafio_konsi/app/core/services/get_it/service_locator.dart';
 
@@ -12,12 +13,12 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  late final FavortesControllerImpl controller;
+  late final FavoritesControllerImpl controller;
 
   @override
   void initState() {
     super.initState();
-    controller = sl<FavortesControllerImpl>();
+    controller = sl<FavoritesControllerImpl>();
     controller.addListener(listener);
     controller.loadLocations();
   }
@@ -47,9 +48,17 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               LoadedFavoritesState(:final listLocationsEntity) =>
                 CustomScrollView(
                   slivers: <Widget>[
+                    SliverToBoxAdapter(
+                      child: SearchWidget(
+                        controller: controller.searchInput,
+                        onChanged: (value) {
+                          controller.filterLocations(value);
+                        },
+                      ),
+                    ),
                     SliverList(
                         delegate: SliverChildBuilderDelegate(
-                            childCount: listLocationsEntity!.length,
+                            childCount: listLocationsEntity.length,
                             (BuildContext context, int index) {
                       final location = listLocationsEntity[index];
                       return ListTile(

@@ -12,7 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:flutter/material.dart';
 
-class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
+class MapsControllerImpl extends BaseController<BaseState> {
   final SearchPostalCodeUsecase searchPostalCodeUsecase;
   final SearchCoordinatesUsecase searchCoordinatesUsecase;
   final GetCurrentLocalizationUsecase getCurrentLocalizationUsecase;
@@ -45,7 +45,6 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
     );
 
     update(newState);
-    notifyListeners();
   }
 
   Future<void> searchCoordinates(double latitude, double longitude,
@@ -75,7 +74,6 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
     );
 
     update(newState);
-    notifyListeners();
   }
 
   void searchPostalCode(String cep) async {
@@ -88,7 +86,6 @@ class MapsControllerImpl extends BaseController<BaseState> with ChangeNotifier {
     );
 
     update(newState);
-    notifyListeners();
   }
 
   Future<void> _updateMapLocation({

@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class SearchWidget extends StatelessWidget {
   final String hintText;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmit;
   final TextEditingController? controller;
 
   const SearchWidget({
     super.key,
     this.hintText = "Search...",
     this.onChanged,
+    this.onSubmit,
     this.controller,
   });
 
@@ -23,7 +25,8 @@ class SearchWidget extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
-        onSubmitted: onChanged,
+        onSubmitted: onSubmit,
+        onChanged: onChanged,
         decoration: InputDecoration(
           hintText: hintText,
           border: InputBorder.none,
