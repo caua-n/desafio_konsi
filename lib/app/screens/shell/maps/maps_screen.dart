@@ -193,6 +193,7 @@ class _MapsScreenState extends State<MapsScreen> {
                         right: 20,
                         bottom: 20,
                         child: FloatingActionButton(
+                          shape: CircleBorder(),
                           onPressed: () {
                             final location = listLocationsEntity.first;
                             controller.searchCoordinates(

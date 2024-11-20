@@ -34,6 +34,7 @@ class TextFieldWidget extends StatelessWidget {
       enabled: enabled,
       autofocus: autoFocus,
       decoration: InputDecoration(
+        focusColor: Color(0xff7C7C7C),
         labelText: labelText,
         hintText: hintText,
         border: const OutlineInputBorder(),

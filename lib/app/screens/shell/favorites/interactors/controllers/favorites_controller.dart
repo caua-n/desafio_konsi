@@ -13,7 +13,7 @@ class FavoritesControllerImpl extends BaseController<BaseState> {
 
   FavoritesControllerImpl(
       {required this.getLocationsUsecase, required this.deleteLocationUsecase})
-      : super(InitialState());
+      : super(LoadedFavoritesState(listLocationsEntity: []));
 
   final TextEditingController searchInput = TextEditingController();
   List<LocationEntity> originalList = [];
