@@ -30,6 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
       color: AppColors.primaryColor,
       child: Center(
         child: Image.asset(
+          width: 166,
+          height: 166,
           'assets/gifs/splash.gif',
         ).animate(onComplete: (controller) => controller.repeat()),
       ),

@@ -17,8 +17,12 @@ final GoRouter router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/',
-      builder: (BuildContext context, GoRouterState state) {
-        return const SplashScreen();
+      parentNavigatorKey: _rootNavigatorKey,
+      pageBuilder: (BuildContext context, GoRouterState state) {
+        return CustomTransitionPage(
+            child: const SplashScreen(),
+            key: state.pageKey,
+            transitionsBuilder: slideFromRightTransition);
       },
     ),
     ShellRoute(
@@ -34,14 +38,7 @@ final GoRouter router = GoRouter(
             return CustomTransitionPage(
               child: const MapsScreen(),
               key: state.pageKey,
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                return FadeTransition(
-                  opacity:
-                      CurveTween(curve: Curves.bounceIn).animate(animation),
-                  child: child,
-                );
-              },
+              transitionsBuilder: fadeTransition,
             );
           },
         ),
@@ -52,14 +49,7 @@ final GoRouter router = GoRouter(
             return CustomTransitionPage(
               child: const FavoritesScreen(),
               key: state.pageKey,
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                return FadeTransition(
-                  opacity:
-                      CurveTween(curve: Curves.bounceIn).animate(animation),
-                  child: child,
-                );
-              },
+              transitionsBuilder: fadeTransition,
             );
           },
         ),
@@ -69,12 +59,47 @@ final GoRouter router = GoRouter(
       path: '/revision',
       name: 'revision',
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (BuildContext context, GoRouterState state) {
+      pageBuilder: (BuildContext context, GoRouterState state) {
         final dto = state.extra as RevisionDto;
-        return RevisionScreen(
-          revisionDto: dto,
+        return CustomTransitionPage(
+          key: state.pageKey,
+          child: RevisionScreen(
+            revisionDto: dto,
+          ),
+          transitionsBuilder: slideFromRightTransition,
         );
       },
     ),
   ],
 );
+
+Widget fadeTransition(
+  BuildContext context,
+  Animation<double> animation,
+  Animation<double> secondaryAnimation,
+  Widget child,
+) {
+  return FadeTransition(
+    opacity: animation,
+    child: child,
+  );
+}
+
+Widget slideFromRightTransition(
+  BuildContext context,
+  Animation<double> animation,
+  Animation<double> secondaryAnimation,
+  Widget child,
+) {
+  const begin = Offset(1.0, 0.0);
+  const end = Offset.zero;
+  const curve = Curves.easeInOut;
+
+  var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+  var offsetAnimation = animation.drive(tween);
+
+  return SlideTransition(
+    position: offsetAnimation,
+    child: child,
+  );
+}
