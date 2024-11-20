@@ -82,7 +82,7 @@ class LocalLocationsDatasource implements ILocationsDatasource {
     final latitude = location['location']['coordinates']['latitude'];
     final longitude = location['location']['coordinates']['longitude'];
 
-    final updatedData = {
+    final Map<String, Object?> updatedData = {
       'cep': location['cep'],
       'state': location['state'],
       'city': location['city'],
@@ -90,6 +90,8 @@ class LocalLocationsDatasource implements ILocationsDatasource {
       'street': location['street'],
       'latitude': latitude,
       'longitude': longitude,
+      'number': location['number'],
+      'complement': location['complement'],
     };
 
     await db.update(

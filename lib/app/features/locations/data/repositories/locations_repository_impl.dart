@@ -15,9 +15,9 @@ class LocationsRepositoryImpl implements ILocationsRepository {
 
   @override
   Future<Output<LocationEntity>> addLocation(
-      LocationEntity location, String number, String complement) async {
+      LocationEntity selectedLocation, String number, String complement) async {
     try {
-      final locationJson = LocationAdapter.toJson(location);
+      final locationJson = LocationAdapter.toJson(selectedLocation);
       locationJson.addAll({
         'number': number,
         'complement': complement,
@@ -25,7 +25,7 @@ class LocationsRepositoryImpl implements ILocationsRepository {
 
       await datasource.addLocation(locationJson);
 
-      return Success(location);
+      return Success(selectedLocation);
     } catch (e) {
       print('Erro no repositório: $e');
       return const Failure(
@@ -64,9 +64,14 @@ class LocationsRepositoryImpl implements ILocationsRepository {
   }
 
   @override
-  Future<Output<bool>> updateLocation(LocationEntity location) async {
+  Future<Output<bool>> updateLocation(
+      LocationEntity selectedLocation, String number, String complement) async {
     try {
-      final locationJson = LocationAdapter.toJson(location);
+      final locationJson = LocationAdapter.toJson(selectedLocation);
+      locationJson.addAll({
+        'number': number,
+        'complement': complement,
+      });
 
       await datasource.updateLocation(locationJson);
 

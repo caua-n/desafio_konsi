@@ -45,9 +45,15 @@ class RevisionControllerImpl extends BaseController<BaseState> {
 
   void updateLocation({
     required LocationEntity selectedLocation,
+    required String number,
+    required String complement,
     required void Function() onSuccess,
   }) async {
-    final result = await updateLocationUsecase(selectedLocation);
+    final result = await updateLocationUsecase((
+      selectedLocation: selectedLocation,
+      number: number,
+      complement: complement,
+    ));
 
     result.fold(
       (location) {

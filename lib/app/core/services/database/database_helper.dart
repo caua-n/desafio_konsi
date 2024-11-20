@@ -11,7 +11,7 @@ class DatabaseHelper {
   static const columnStreet = 'street';
   static const columnLatitude = 'latitude';
   static const columnLongitude = 'longitude';
-  static const columnAddressNumber = 'address_number';
+  static const columnAddressNumber = 'number';
   static const columnComplement = 'complement';
 
   static Future<Database> initDatabase() async {
@@ -31,7 +31,7 @@ class DatabaseHelper {
             $columnLatitude REAL NOT NULL,
             $columnLongitude REAL NOT NULL,
             $columnAddressNumber TEXT NOT NULL,
-            $columnComplement TEXT
+            $columnComplement TEXT NOT NULL,
           )
         ''');
       },

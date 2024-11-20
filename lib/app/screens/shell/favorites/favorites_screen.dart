@@ -96,7 +96,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         ),
                         child: ListTile(
                           title: Text(location.postalCode),
-                          subtitle: Text(location.complement ?? ''),
+                          subtitle: Text(location.number ?? ''),
                         ),
                       );
                     }))

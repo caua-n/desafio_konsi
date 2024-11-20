@@ -13,6 +13,8 @@ class LocationAdapter {
         city: data['city'] ?? '',
         neighbourhood: data['neighborhood'] ?? '',
         street: data['street'] ?? '',
+        complement: data['complement'] ?? '',
+        number: data['number'] ?? '',
         coordinates: CoordinatesAdapter.fromJson(
           data['location']?['coordinates'] ?? data['coordinates'],
         ),
@@ -43,6 +45,8 @@ class LocationAdapter {
       'city': entity.city,
       'neighbourhood': entity.neighbourhood,
       'street': entity.street,
+      'complement': entity.complement,
+      'number': entity.number,
       'location': {
         'type': 'Point',
         'coordinates': CoordinatesAdapter.toJson(entity.coordinates),

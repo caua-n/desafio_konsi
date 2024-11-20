@@ -138,11 +138,16 @@ class _RevisionScreenState extends State<RevisionScreen> {
                                         break;
                                       case RevisionType.update:
                                         controller.updateLocation(
-                                            selectedLocation:
-                                                widget.revisionDto.location,
-                                            onSuccess: () {
-                                              context.go('/favorites');
-                                            });
+                                          onSuccess: () {
+                                            context.go('/favorites');
+                                          },
+                                          selectedLocation:
+                                              widget.revisionDto.location,
+                                          number: controller
+                                              .numberController.value.text,
+                                          complement: controller
+                                              .complementController.value.text,
+                                        );
                                         break;
                                       default:
                                     }

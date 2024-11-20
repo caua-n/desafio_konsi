@@ -3,7 +3,14 @@ import 'package:desafio_konsi/app/core/usecases/usecases.dart';
 import 'package:desafio_konsi/app/features/locations/domain/entities/location_entity.dart';
 import 'package:desafio_konsi/app/features/locations/domain/repositories/i_locations_repository.dart';
 
-abstract class IUpdateLocationUsecase extends UseCase<bool, LocationEntity> {}
+typedef UpdateLocationParams = ({
+  LocationEntity selectedLocation,
+  String number,
+  String complement
+});
+
+abstract class IUpdateLocationUsecase
+    extends UseCase<bool, UpdateLocationParams> {}
 
 class UpdateLocationUsecase extends IUpdateLocationUsecase {
   final ILocationsRepository repository;
@@ -11,7 +18,8 @@ class UpdateLocationUsecase extends IUpdateLocationUsecase {
   UpdateLocationUsecase({required this.repository});
 
   @override
-  Future<Output<bool>> call(LocationEntity params) async {
-    return await repository.updateLocation(params);
+  Future<Output<bool>> call(UpdateLocationParams params) {
+    return repository.updateLocation(
+        params.selectedLocation, params.number, params.complement);
   }
 }
