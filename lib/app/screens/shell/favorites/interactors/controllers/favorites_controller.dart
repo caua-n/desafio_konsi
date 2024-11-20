@@ -21,14 +21,13 @@ class FavoritesControllerImpl extends BaseController<BaseState> {
 
   void loadLocations() async {
     final result = await getLocationsUsecase();
-    final newState = result.fold(
-      (data) {
-        originalList = data;
-        filteredList = List.from(originalList);
-        return LoadedFavoritesState(listLocationsEntity: data);
-      },
-      ErrorState.new,
-    );
+    final newState = result.fold((data) {
+      originalList = data;
+      filteredList = List.from(originalList);
+      return LoadedFavoritesState(listLocationsEntity: data);
+    }, (error) {
+      return EmptyFavoritesState();
+    });
 
     update(newState);
   }

@@ -9,3 +9,5 @@ class LoadedFavoritesState extends BaseState {
     required this.listLocationsEntity,
   });
 }
+
+class EmptyFavoritesState extends BaseState {}

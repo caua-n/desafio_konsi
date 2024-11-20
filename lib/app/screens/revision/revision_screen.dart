@@ -128,7 +128,7 @@ class _RevisionScreenState extends State<RevisionScreen> {
                                     autoFocus: true,
                                     labelText: 'Número',
                                     hintText: ' ',
-                                    keyboardType: TextInputType.phone,
+                                    keyboardType: TextInputType.number,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'O número é obrigatório';

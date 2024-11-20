@@ -31,7 +31,7 @@ class DatabaseHelper {
             $columnLatitude REAL NOT NULL,
             $columnLongitude REAL NOT NULL,
             $columnAddressNumber TEXT NOT NULL,
-            $columnComplement TEXT NOT NULL,
+            $columnComplement TEXT NOT NULL
           )
         ''');
       },

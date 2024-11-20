@@ -147,6 +147,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       }))
                     ],
                   ),
+                EmptyFavoritesState() => CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: SearchWidget(
+                          keyboardType: TextInputType.number,
+                          controller: controller.searchInput,
+                          onChanged: (value) {
+                            controller.filterLocations(value);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ErrorState(:final exception) =>
                   Center(child: Text('Erro: $exception')),
                 _ => Center(child: Text('Estado desconhecido: $state')),

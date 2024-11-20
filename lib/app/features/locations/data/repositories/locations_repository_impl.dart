@@ -115,8 +115,7 @@ class LocationsRepositoryImpl implements ILocationsRepository {
         'cep': place.postalCode,
         'state': place.administrativeArea,
         'city': place.subAdministrativeArea,
-        'neighborhood':
-            place.subLocality, // Altere conforme os padrões do BrasilAPI
+        'neighborhood': place.subLocality,
         'street': place.street,
         'location': {
           'coordinates': {
