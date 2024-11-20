@@ -1,16 +1,20 @@
 # desafio_konsi
 
-A new Flutter project.
+## Versões Necessárias
 
-## Getting Started
+- **Dart**: ![Dart Version](https://img.shields.io/static/v1?label=Dart&amp;message=3.5.3&amp;color=blue&amp;logo=dart)
+  [Documentação Oficial do Dart](https://dart.dev)
 
-This project is a starting point for a Flutter application.
+- **Flutter**: ![Flutter Version](https://img.shields.io/static/v1?label=Flutter&amp;message=3.24.3&amp;color=blue&amp;logo=flutter)
+  [Documentação Oficial do Flutter](https://docs.flutter.dev/get-started/install)
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Tecnologias e Pacotes Utilizados
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Get It](https://pub.dev/packages/get_it): Para injeção de dependências.
+- [Go Router](https://pub.dev/packages/go_router): Gerenciamento de rotas no app.
+- [ValueNotifier](https://api.flutter.dev/flutter/foundation/ValueNotifier-class.html): Utilizado para gerenciar estados dentro do app.
+- [Google Maps](https://pub.dev/packages/google_maps_flutter): Utilizado para obter o mapa do mundo.
+- [SQfLite](https://pub.dev/packages/sqflite): Utilizado para ter um banco de dados local e fazer um insert/query/update/delete.
+- [Geocoding](https://pub.dev/packages/geocoding): API para obter dados de uma área a partir da Latitude e Longitude ou Endereço.
+- [Geolocator](https://pub.dev/packages/geolocator): Permissão de localização atual do dispositivo.
