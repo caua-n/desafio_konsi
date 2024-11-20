@@ -38,9 +38,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Locations Screen'),
-      ),
       body: ValueListenableBuilder(
           valueListenable: controller,
           builder: (context, state, child) {
@@ -53,6 +50,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   slivers: <Widget>[
                     SliverToBoxAdapter(
                       child: SearchWidget(
+                        keyboardType: TextInputType.number,
                         controller: controller.searchInput,
                         onChanged: (value) {
                           controller.filterLocations(value);

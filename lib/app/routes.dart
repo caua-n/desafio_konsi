@@ -7,33 +7,29 @@ import 'package:desafio_konsi/app/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-// Navigator keys for root and shell navigators
 final GlobalKey<NavigatorState> _rootNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _shellNavigatorKey =
     GlobalKey<NavigatorState>(debugLabel: 'shell');
 
-// Main router configuration
 final GoRouter router = GoRouter(
-  navigatorKey: _rootNavigatorKey, // Root Navigator
+  navigatorKey: _rootNavigatorKey,
   routes: <RouteBase>[
-    // Splash screen route
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
         return const SplashScreen();
       },
     ),
-    // Shell route for bottom navigation bar
     ShellRoute(
-      navigatorKey: _shellNavigatorKey, // Shell Navigator
+      navigatorKey: _shellNavigatorKey,
       builder: (BuildContext context, GoRouterState state, Widget child) {
-        return ScaffoldWithNavBar(child: child); // Shell with child widget
+        return ScaffoldWithNavBar(child: child);
       },
       routes: <RouteBase>[
         GoRoute(
           path: '/maps',
-          parentNavigatorKey: _shellNavigatorKey, // Route inside Shell
+          parentNavigatorKey: _shellNavigatorKey,
           pageBuilder: (context, state) {
             return CustomTransitionPage(
               child: const MapsScreen(),
@@ -51,7 +47,7 @@ final GoRouter router = GoRouter(
         ),
         GoRoute(
           path: '/favorites',
-          parentNavigatorKey: _shellNavigatorKey, // Route inside Shell
+          parentNavigatorKey: _shellNavigatorKey,
           pageBuilder: (context, state) {
             return CustomTransitionPage(
               child: const FavoritesScreen(),
@@ -69,13 +65,11 @@ final GoRouter router = GoRouter(
         ),
       ],
     ),
-    // Revision route outside the shell
     GoRoute(
       path: '/revision',
-      name: 'revision', // Name for pushNamed
-      parentNavigatorKey: _rootNavigatorKey, // Use root Navigator
+      name: 'revision',
+      parentNavigatorKey: _rootNavigatorKey,
       builder: (BuildContext context, GoRouterState state) {
-        // Retrieve the RevisionDto from extra
         final dto = state.extra as RevisionDto;
         return RevisionScreen(
           revisionDto: dto,
