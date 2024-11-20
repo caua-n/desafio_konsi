@@ -1,4 +1,4 @@
-![add_location](https://github.com/user-attachments/assets/944e2202-6fb2-44e3-86fe-12fda54310ff)# desafio_konsi
+# desafio_konsi
 
 ## Versões Necessárias
 
