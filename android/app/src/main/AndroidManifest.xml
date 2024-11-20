@@ -4,7 +4,7 @@
     
     <application
         android:label="desafio_konsi"
-        android:name="${applicationName}"
+        android:name="android.app.Application"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -28,8 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-       <meta-data
-            android:name="com.google.android.geo.API_KEY" 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
             android:value="${API_KEY}" />
         <meta-data
             android:name="flutterEmbedding"

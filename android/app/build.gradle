@@ -5,6 +5,17 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader("UTF-8") { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def apiKey = localProperties.getProperty("API_KEY")
+
+
 android {
     namespace = "com.example.desafio_konsi"
     compileSdk = flutter.compileSdkVersion
@@ -24,11 +35,13 @@ android {
         applicationId = "com.example.desafio_konsi"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        manifestPlaceholders = [API_KEY: apiKey]
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+         manifestPlaceholders = [
+            API_KEY: apiKey
+        ]
     }
 
     buildTypes {
@@ -38,18 +51,8 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+    
 }
-
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file("local.properties")
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader("UTF-8") { reader ->
-        localProperties.load(reader)
-    }
-}
-
-def apiKey = localProperties.getProperty("API_KEY")
-
 
 flutter {
     source = "../.."
