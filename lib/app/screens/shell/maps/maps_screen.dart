@@ -235,16 +235,23 @@ class _MapsScreenState extends State<MapsScreen> {
 
               return Opacity(
                 opacity: 1.0,
-                child: Column(
-                  children: [
-                    Text('O que aconteceu: $reason'),
-                    ElevatedButton(
-                      onPressed: () {
-                        controller.getCurrentLocalization();
-                      },
-                      child: const Text('Solicitar novamente'),
-                    ),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'O que aconteceu: $reason',
+                        textAlign: TextAlign.center,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          controller.getCurrentLocalization();
+                        },
+                        child: const Text('Solicitar novamente'),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

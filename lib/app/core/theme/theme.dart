@@ -39,7 +39,7 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.primaryColor,
-          textStyle: TextStyle(fontWeight: FontWeight.bold),
+          textStyle: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(

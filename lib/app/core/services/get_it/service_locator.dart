@@ -9,9 +9,7 @@ import 'package:desafio_konsi/app/features/locations/domain/usecases/update_loca
 import 'package:desafio_konsi/app/screens/revision/interactors/controllers/revision_controller.dart';
 import 'package:desafio_konsi/app/screens/shell/favorites/interactors/controllers/favorites_controller.dart';
 import 'package:dio/dio.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:desafio_konsi/app/core/services/database/database_helper.dart';
-import 'package:desafio_konsi/app/core/utils/network_info.dart';
 import 'package:desafio_konsi/app/features/locations/data/datasources/local/locations_local_datasource.dart';
 import 'package:desafio_konsi/app/features/locations/data/datasources/i_locations_datasource.dart';
 import 'package:desafio_konsi/app/features/locations/data/datasources/remote/locations_remote_datasource.dart';
@@ -32,11 +30,6 @@ Future<void> init() async {
 
   // **Localization**
   sl.registerLazySingleton(() => LocalizationService());
-
-  // **Internet**
-  sl.registerLazySingleton<Connectivity>(() => Connectivity());
-  sl.registerLazySingleton<NetworkInfo>(
-      () => NetworkInfoImpl(sl<Connectivity>()));
 
   // **Database**
   sl.registerLazySingleton<Future<Database>>(
