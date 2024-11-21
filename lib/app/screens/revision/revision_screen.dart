@@ -3,6 +3,7 @@ import 'package:desafio_konsi/app/core/services/get_it/service_locator.dart';
 import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:desafio_konsi/app/screens/revision/interactors/controllers/revision_controller.dart';
 import 'package:desafio_konsi/app/screens/revision/interactors/dtos/revision_dto.dart';
+import 'package:desafio_konsi/app/screens/revision/interactors/states/revision_states.dart';
 import 'package:desafio_konsi/app/screens/revision/widgets/revision_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,7 +39,14 @@ class _RevisionScreenState extends State<RevisionScreen> {
     controller.addressController.text = dto.location.street;
   }
 
-  void listener() {}
+  void listener() {
+    switch (controller.state) {
+      case RevisionDoneState():
+        context.go('/favorites');
+        break;
+      default:
+    }
+  }
 
   @override
   void dispose() {
@@ -165,9 +173,6 @@ class _RevisionScreenState extends State<RevisionScreen> {
                                 switch (widget.revisionDto.type) {
                                   case RevisionType.add:
                                     controller.addLocation(
-                                      onSuccess: () {
-                                        context.go('/favorites');
-                                      },
                                       selectedLocation:
                                           widget.revisionDto.location,
                                       number: controller
@@ -213,6 +218,9 @@ class _RevisionScreenState extends State<RevisionScreen> {
                         ),
                       )
                     ],
+                  ),
+                RevisionDoneState() => const Center(
+                    child: Icon(Icons.done),
                   ),
                 ErrorState(:final exception) =>
                   Center(child: Text('Erro: $exception')),

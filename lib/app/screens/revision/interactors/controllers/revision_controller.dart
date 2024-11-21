@@ -3,6 +3,7 @@ import 'package:desafio_konsi/app/core/states/base_state.dart';
 import 'package:desafio_konsi/app/features/locations/domain/entities/location_entity.dart';
 import 'package:desafio_konsi/app/features/locations/domain/usecases/add_location_usecase.dart';
 import 'package:desafio_konsi/app/features/locations/domain/usecases/update_location_usecase.dart';
+import 'package:desafio_konsi/app/screens/revision/interactors/states/revision_states.dart';
 import 'package:flutter/material.dart';
 
 class RevisionControllerImpl extends BaseController<BaseState> {
@@ -23,7 +24,6 @@ class RevisionControllerImpl extends BaseController<BaseState> {
     required LocationEntity selectedLocation,
     required String number,
     required String complement,
-    required void Function() onSuccess,
   }) async {
     final result = await addLocationUsecase(
       (
@@ -33,14 +33,15 @@ class RevisionControllerImpl extends BaseController<BaseState> {
       ),
     );
 
-    result.fold(
+    final newState = result.fold(
       (location) {
-        onSuccess();
+        return RevisionDoneState();
       },
       (error) {
         return ErrorState(error);
       },
     );
+    update(newState);
   }
 
   void updateLocation({

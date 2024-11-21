@@ -18,10 +18,10 @@ class MapsControllerImpl extends BaseController<BaseState> {
   final GetCurrentLocalizationUsecase getCurrentLocalizationUsecase;
 
   late GoogleMapController googleMaps;
+  final TextEditingController searchInput = TextEditingController();
   Map<MarkerId, Marker> markers = {};
   final FocusNode searchFocusNode = FocusNode();
   final ValueNotifier<bool> isSearchFocused = ValueNotifier(false);
-  final TextEditingController searchInput = TextEditingController();
 
   MapsControllerImpl({
     required this.searchPostalCodeUsecase,

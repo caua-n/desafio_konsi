@@ -34,7 +34,11 @@ class _MapsScreenState extends State<MapsScreen> {
     });
   }
 
-  void listener() {}
+  void listener() {
+    // if (controller.state is MapsState && controller.state.latitude != null) {
+    //   controller.googleMaps.animateCamera(cameraUpdate);
+    // }
+  }
 
   @override
   void dispose() {
